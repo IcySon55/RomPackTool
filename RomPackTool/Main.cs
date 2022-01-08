@@ -252,17 +252,20 @@ namespace RomPackTool
                 textBox1.Clear();
                 btnCreateNoIntroPSV.Enabled = false;
                 progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+                progressBar1.Maximum = 1000;
 
                 var progress = new Progress<ProgressReport>(p =>
                 {
+                    if (p.Percentage > 0)
+                    {
+                        progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+                        progressBar1.Value = (int)p.Percentage;
+                    }
                     if (p.HasMessage)
                         textBox1.AppendText(p.Message + "\r\n");
                 });
                 await Task.Run(() => ConvertToNoIntro(ofd.FileName, progress));
 
-                progressBar1.Maximum = 100;
-                progressBar1.Value = 100;
-                progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
                 btnCreateNoIntroPSV.Enabled = true;
             }
         }
@@ -307,24 +310,48 @@ namespace RomPackTool
             var rifHeader = new byte[] { 0xFF, 0xFF, 0x00, 0x01, 0x00, 0x01, 0x04, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
             progress.Report(new ProgressReport { Message = $"Locating the license offset..." });
+
+            var blockSize = 0x1000;
+            var totalSize = 0L;
             var sector = 0x10;
-            var offset = 0;
+            var sectorSize = 0x200;
+            var licenseOffset = 0;
+            byte[] block;
+
             while (br.BaseStream.Position != br.BaseStream.Length)
             {
-                br.BaseStream.Position = sector * 0x200;
-                if (br.ReadBytes(0x10).SequenceEqual(rifHeader))
-                    offset = sector * 0x200;
-                sector++;
+                br.BaseStream.Position = sector * sectorSize;
+
+                var bytesRemaining = br.BaseStream.Length - br.BaseStream.Position;
+                var readBytes = Math.Min(blockSize, bytesRemaining);
+
+                block = br.ReadBytes((int)readBytes);
+
+                var found = false;
+                var sectors = block.Length / sectorSize;
+                for (var i = 0; i < sectors; i++)
+                {
+                    var blockOffset = i * sectorSize;
+                    if (block.Skip(blockOffset).Take(rifHeader.Length).SequenceEqual(rifHeader))
+                    {
+                        licenseOffset = (sector * sectorSize) + blockOffset;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+
+                sector += sectors;
             }
 
-            if (offset <= 0)
+            if (licenseOffset <= 0)
             {
                 progress.Report(new ProgressReport { Message = $"ERROR: The license could not be found in the PSV file." });
                 return;
             }
             progress.Report(new ProgressReport { Message = $"License offset found!" });
 
-            br.BaseStream.Position = offset;
+            br.BaseStream.Position = licenseOffset;
             var ogRif = br.ReadType<VitaRIF>();
 
             // Final sanity check.
@@ -337,52 +364,73 @@ namespace RomPackTool
             // ALL SET!
 
             // Writing
+            var size = (double)br.BaseStream.Length;
             using var bw = new BinaryWriterX(File.Create(newPsvPath));
-            progress.Report(new ProgressReport { Message = $"Saving No-Intro PSV..." });
 
             // Reset our PSV reader back to the beginning.
             br.BaseStream.Position = 0;
+            progress.Report(new ProgressReport { Message = $"Saving No-Intro PSV...", Percentage = 0 });
 
             // PSV Header
             bw.Write(br.ReadBytes(0xC));
 
             // Nullify 0xC for 0x54.
+            progress.Report(new ProgressReport { Message = "Nullifying unique PSV header bytes..." });
             for (var i = 0; i < 0x54; i++)
                 bw.Write((byte)0x0);
+            progress.Report(new ProgressReport { Message = "Copying data..." });
 
             // Resync
             br.BaseStream.Position = bw.BaseStream.Position;
 
             // Copy structure until 0x1E00.
             bw.Write(br.ReadBytes(0x1E00 - (int)br.BaseStream.Position));
+            progress.Report(new ProgressReport { Percentage = bw.BaseStream.Position / size * 1000 });
 
             // Nullify 0x1E00 for 0x260.
+            progress.Report(new ProgressReport { Message = "Nullifying unknown unique block..." });
             for (var i = 0; i < 0x260; i++)
                 bw.Write((byte)0x0);
+            progress.Report(new ProgressReport { Message = "Copying data..." });
 
             // Resync
             br.BaseStream.Position = bw.BaseStream.Position;
 
-            // Copy structure until we reach the license.
-            // Copying in blocks of 0x40 might also work.
-            var copyLength = offset - br.BaseStream.Position;
-            for (var i = 0; i < copyLength; i += 0x20)
-                bw.Write(br.ReadBytes(0x20));
+            // Copy data until we reach the license in blocks.
+            blockSize = 0x100000;
+            totalSize = licenseOffset - br.BaseStream.Position;
+            var updateInterval = 4;
+            for (var i = 0; i < totalSize; i += blockSize)
+            {
+                var bytesRemaining = licenseOffset - br.BaseStream.Position;
+                var readBytes = Math.Min(blockSize, bytesRemaining);
+                bw.Write(br.ReadBytes((int)readBytes));
+                if (i % (blockSize * updateInterval) == 0)
+                    progress.Report(new ProgressReport { Percentage = bw.BaseStream.Position / size * 1000 });
+            }
 
             // Write the license.
+            progress.Report(new ProgressReport { Message = "Injecting NoNpDrm license..." });
             bw.Write(nndBr.ReadAllBytes());
+            progress.Report(new ProgressReport { Message = "Copying data...", Percentage = bw.BaseStream.Position / size * 1000 });
 
             // Resync
             br.BaseStream.Position = bw.BaseStream.Position;
 
-            // Copy the rest of the game data in blocks of 512 bytes (0x200).
-            copyLength = br.BaseStream.Length - br.BaseStream.Position;
-            for (var i = 0; i < copyLength; i += 0x200)
-                bw.Write(br.ReadBytes(0x200));
+            // Copy the rest of the game data in blocks.
+            blockSize = 0x100000;
+            totalSize = br.BaseStream.Length - br.BaseStream.Position;
+            for (var i = 0; i < totalSize; i += blockSize)
+            {
+                var bytesRemaining = br.BaseStream.Length - br.BaseStream.Position;
+                var readBytes = Math.Min(blockSize, bytesRemaining);
+                bw.Write(br.ReadBytes((int)readBytes));
+                if (i % (blockSize * updateInterval) == 0)
+                    progress.Report(new ProgressReport { Percentage = bw.BaseStream.Position / size * 1000 });
+            }
 
             bw.Close();
-
-            progress.Report(new ProgressReport { Message = $"No-Intro PSV created successfully!" });
+            progress.Report(new ProgressReport { Message = $"No-Intro PSV created successfully!", Percentage = 1000 });
         }
 
         private void btnBrowseVitaDumps_Click(object sender, EventArgs e)

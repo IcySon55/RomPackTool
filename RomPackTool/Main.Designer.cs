@@ -43,6 +43,7 @@ namespace RomPackTool
             this.btnCreateNoIntroPSV = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnBuildRomPack = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.pnlMain.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -67,7 +68,7 @@ namespace RomPackTool
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(129, 22);
+            this.textBox2.Location = new System.Drawing.Point(136, 22);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(149, 23);
             this.textBox2.TabIndex = 3;
@@ -75,7 +76,7 @@ namespace RomPackTool
             // lblIP
             // 
             this.lblIP.AutoSize = true;
-            this.lblIP.Location = new System.Drawing.Point(80, 25);
+            this.lblIP.Location = new System.Drawing.Point(87, 25);
             this.lblIP.Name = "lblIP";
             this.lblIP.Size = new System.Drawing.Size(43, 15);
             this.lblIP.TabIndex = 4;
@@ -83,7 +84,7 @@ namespace RomPackTool
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(80, 51);
+            this.button2.Location = new System.Drawing.Point(87, 51);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(198, 46);
             this.button2.TabIndex = 5;
@@ -93,7 +94,7 @@ namespace RomPackTool
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(80, 74);
+            this.button3.Location = new System.Drawing.Point(87, 74);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(198, 46);
             this.button3.TabIndex = 6;
@@ -103,6 +104,7 @@ namespace RomPackTool
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.btnBrowseVitaDumps);
             this.groupBox1.Controls.Add(this.textBox3);
             this.groupBox1.Controls.Add(this.button2);
@@ -117,9 +119,9 @@ namespace RomPackTool
             // 
             // btnBrowseVitaDumps
             // 
-            this.btnBrowseVitaDumps.Location = new System.Drawing.Point(284, 102);
+            this.btnBrowseVitaDumps.Location = new System.Drawing.Point(291, 102);
             this.btnBrowseVitaDumps.Name = "btnBrowseVitaDumps";
-            this.btnBrowseVitaDumps.Size = new System.Drawing.Size(92, 23);
+            this.btnBrowseVitaDumps.Size = new System.Drawing.Size(85, 23);
             this.btnBrowseVitaDumps.TabIndex = 7;
             this.btnBrowseVitaDumps.Text = "Browse...";
             this.btnBrowseVitaDumps.UseVisualStyleBackColor = true;
@@ -127,9 +129,9 @@ namespace RomPackTool
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(6, 103);
+            this.textBox3.Location = new System.Drawing.Point(87, 103);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(272, 23);
+            this.textBox3.Size = new System.Drawing.Size(198, 23);
             this.textBox3.TabIndex = 6;
             // 
             // pnlMain
@@ -158,7 +160,7 @@ namespace RomPackTool
             // 
             // btnCreateNoIntroPSV
             // 
-            this.btnCreateNoIntroPSV.Location = new System.Drawing.Point(80, 22);
+            this.btnCreateNoIntroPSV.Location = new System.Drawing.Point(87, 22);
             this.btnCreateNoIntroPSV.Name = "btnCreateNoIntroPSV";
             this.btnCreateNoIntroPSV.Size = new System.Drawing.Size(198, 46);
             this.btnCreateNoIntroPSV.TabIndex = 7;
@@ -180,13 +182,22 @@ namespace RomPackTool
             // btnBuildRomPack
             // 
             this.btnBuildRomPack.Enabled = false;
-            this.btnBuildRomPack.Location = new System.Drawing.Point(80, 22);
+            this.btnBuildRomPack.Location = new System.Drawing.Point(87, 22);
             this.btnBuildRomPack.Name = "btnBuildRomPack";
             this.btnBuildRomPack.Size = new System.Drawing.Size(198, 46);
             this.btnBuildRomPack.TabIndex = 7;
             this.btnBuildRomPack.Text = "Build RomPack from Directory...";
             this.btnBuildRomPack.UseVisualStyleBackColor = true;
             this.btnBuildRomPack.Click += new System.EventHandler(this.btnBuildRomPack_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 106);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 15);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Dump Path:";
             // 
             // Main
             // 
@@ -195,7 +206,7 @@ namespace RomPackTool
             this.ClientSize = new System.Drawing.Size(892, 479);
             this.Controls.Add(this.pnlMain);
             this.Name = "Main";
-            this.Text = "RomPackTool - Alpha 3";
+            this.Text = "RomPackTool - Alpha 4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.groupBox1.ResumeLayout(false);
@@ -223,6 +234,7 @@ namespace RomPackTool
         private System.Windows.Forms.Button btnCreateNoIntroPSV;
         private System.Windows.Forms.Button btnBrowseVitaDumps;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label1;
     }
 }
 

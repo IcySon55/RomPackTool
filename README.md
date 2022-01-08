@@ -1,4 +1,5 @@
-# Kuriimu2
+# RomPackTool
 
 
 ## Requirements
+.Net 5 Desktop Runtime
