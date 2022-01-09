@@ -1,6 +1,4 @@
-﻿using RomPackTool.RMP;
-
-namespace RomPackTool
+﻿namespace RomPackTool.RMPK
 {
     /// <summary>
     /// Extends the standard RomPackFileEntry to store a dedicated FtpPath.

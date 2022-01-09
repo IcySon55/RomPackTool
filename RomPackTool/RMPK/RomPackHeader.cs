@@ -1,6 +1,6 @@
 ﻿using Komponent.IO.Attributes;
 
-namespace RomPackTool.RMP
+namespace RomPackTool.RMPK
 {
     /// <summary>
     /// RomPack header definition.

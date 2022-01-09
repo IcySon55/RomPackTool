@@ -1,4 +1,4 @@
-﻿namespace RomPackTool
+﻿namespace RomPackTool.Models
 {
     /// <summary>
     /// The ProgressReport class passes completion percentages to the UI.

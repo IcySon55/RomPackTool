@@ -36,14 +36,15 @@ namespace RomPackTool
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnBrowseVitaDumps = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnExtractNoNpDrm = new System.Windows.Forms.Button();
             this.btnCreateNoIntroPSV = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnBuildRomPack = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.pnlMain.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -52,6 +53,9 @@ namespace RomPackTool
             // 
             // progressBar1
             // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(400, 444);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(480, 23);
@@ -59,6 +63,9 @@ namespace RomPackTool
             // 
             // textBox1
             // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(400, 12);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -117,9 +124,18 @@ namespace RomPackTool
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PlayStation Vita/TV";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(11, 106);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 15);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Dump Path:";
+            // 
             // btnBrowseVitaDumps
             // 
-            this.btnBrowseVitaDumps.Location = new System.Drawing.Point(291, 102);
+            this.btnBrowseVitaDumps.Location = new System.Drawing.Point(291, 103);
             this.btnBrowseVitaDumps.Name = "btnBrowseVitaDumps";
             this.btnBrowseVitaDumps.Size = new System.Drawing.Size(85, 23);
             this.btnBrowseVitaDumps.TabIndex = 7;
@@ -150,6 +166,7 @@ namespace RomPackTool
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnExtractNoNpDrm);
             this.groupBox3.Controls.Add(this.btnCreateNoIntroPSV);
             this.groupBox3.Location = new System.Drawing.Point(12, 356);
             this.groupBox3.Name = "groupBox3";
@@ -158,11 +175,21 @@ namespace RomPackTool
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "PSV Tools";
             // 
+            // btnExtractNoNpDrm
+            // 
+            this.btnExtractNoNpDrm.Location = new System.Drawing.Point(194, 22);
+            this.btnExtractNoNpDrm.Name = "btnExtractNoNpDrm";
+            this.btnExtractNoNpDrm.Size = new System.Drawing.Size(182, 46);
+            this.btnExtractNoNpDrm.TabIndex = 8;
+            this.btnExtractNoNpDrm.Text = "Extract NoNpDrm from PSV";
+            this.btnExtractNoNpDrm.UseVisualStyleBackColor = true;
+            this.btnExtractNoNpDrm.Click += new System.EventHandler(this.btnExtractNoNpDrm_Click);
+            // 
             // btnCreateNoIntroPSV
             // 
-            this.btnCreateNoIntroPSV.Location = new System.Drawing.Point(87, 22);
+            this.btnCreateNoIntroPSV.Location = new System.Drawing.Point(6, 22);
             this.btnCreateNoIntroPSV.Name = "btnCreateNoIntroPSV";
-            this.btnCreateNoIntroPSV.Size = new System.Drawing.Size(198, 46);
+            this.btnCreateNoIntroPSV.Size = new System.Drawing.Size(182, 46);
             this.btnCreateNoIntroPSV.TabIndex = 7;
             this.btnCreateNoIntroPSV.Text = "Create No-Intro PSV";
             this.btnCreateNoIntroPSV.UseVisualStyleBackColor = true;
@@ -190,15 +217,6 @@ namespace RomPackTool
             this.btnBuildRomPack.UseVisualStyleBackColor = true;
             this.btnBuildRomPack.Click += new System.EventHandler(this.btnBuildRomPack_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 106);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 15);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Dump Path:";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -206,7 +224,7 @@ namespace RomPackTool
             this.ClientSize = new System.Drawing.Size(892, 479);
             this.Controls.Add(this.pnlMain);
             this.Name = "Main";
-            this.Text = "RomPackTool - Alpha 4";
+            this.Text = "RomPackTool - Alpha 5";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.groupBox1.ResumeLayout(false);
@@ -235,6 +253,7 @@ namespace RomPackTool
         private System.Windows.Forms.Button btnBrowseVitaDumps;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnExtractNoNpDrm;
     }
 }
 

@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace RomPackTool.RMP
+namespace RomPackTool.RMPK
 {
     /// <summary>
     /// RomPack file entry definition.

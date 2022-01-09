@@ -1,13 +1,13 @@
 ﻿using FluentFTP;
 using Komponent.IO;
-using RomPackTool.RMP;
+using RomPackTool.Models;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RomPackTool
+namespace RomPackTool.RMPK
 {
     public static class RomPackExtensions
     {

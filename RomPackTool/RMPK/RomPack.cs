@@ -1,5 +1,6 @@
 ﻿using Komponent.IO;
 using Komponent.IO.Streams;
+using RomPackTool.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RomPackTool.RMP
+namespace RomPackTool.RMPK
 {
     /// <summary>
     /// Main interaction class for RomPacks.

@@ -8,13 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RMP\RomPackConverter.cs" />
+    <Compile Remove="RMPK\RomPackConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentFTP" Version="35.2.3" />
     <PackageReference Include="Komponent" Version="2.0.8" />
     <PackageReference Include="Kontract" Version="2.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ExFat.Core">
+      <HintPath>lib\ExFat.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

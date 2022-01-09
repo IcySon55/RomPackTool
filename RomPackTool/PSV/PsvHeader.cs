@@ -5,12 +5,15 @@
 using Komponent.IO.Attributes;
 using System;
 
-namespace RomPackTool.Models
+namespace RomPackTool.PSV
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [Alignment(0x200)]
     public class PsvHeader
     {
-        public static long HeaderSize => 0x200;
+        public static long SectorSize => 0x200;
 
         /// <summary>
         /// PSV Magic Header
@@ -21,7 +24,7 @@ namespace RomPackTool.Models
         /// <summary>
         /// PSV Version Number
         /// </summary>
-        public int Version = 0x0;
+        public int Version;
 
         /// <summary>
         /// PSV Image Flags
@@ -32,25 +35,25 @@ namespace RomPackTool.Models
         /// For klicensee decryption.
         /// </summary>
         [FixedLength(0x10)]
-        public byte[] Key1;
+        public byte[] Key1 = new byte[0x10];
 
         /// <summary>
         /// For klicensee decryption.
         /// </summary>
         [FixedLength(0x10)]
-        public byte[] Key2;
+        public byte[] Key2 = new byte[0x10];
 
         /// <summary>
         /// Same as in RIF.
         /// </summary>
         [FixedLength(0x14)]
-        public byte[] Signature;
+        public byte[] Signature = new byte[0x14];
 
         /// <summary>
         /// Optional consistancy check. sha256 over complete data (including any trimmed bytes) if cart dump, sha256 over the pkg if digital dump.
         /// </summary>
         [FixedLength(0x20)]
-        public byte[] Hash;
+        public byte[] Hash = new byte[0x20];
 
         /// <summary>
         /// If trimmed, this will be actual size.
@@ -61,13 +64,5 @@ namespace RomPackTool.Models
         /// Image (dump/pkg) offset in multiple of 512 bytes. must be > 0 if an actual image exists. == 0 if no image is included.
         /// </summary>
         public long ImageOffsetSector;
-    }
-
-    [Flags]
-    public enum PsvFlags : int
-    {
-        FLAG_TRIMMED = 1,
-        FLAG_DIGITAL = 2,
-        FLAG_COMPRESSED = 4
     }
 }
