@@ -1,4 +1,4 @@
-![](https://github.com/IcySon55/RomPackTool/raw/master/RomPackTool/icon.png)
+![](https://github.com/IcySon55/RomPackTool/raw/master/RomPackTool.WinForms/icon.png)
 # RomPackTool
 RomPackTool seeks to become a simple to use Vita (and potentially more) rom image management and manipulation tool.
 
