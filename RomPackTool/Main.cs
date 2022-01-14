@@ -2,11 +2,11 @@
 using FluentFTP;
 using Komponent.IO;
 using Komponent.IO.Streams;
-using Kontract.Models.IO;
-using RomPackTool.Models;
-using RomPackTool.Models.Vita;
-using RomPackTool.PSV;
-using RomPackTool.RMPK;
+using RomPackTool.Core.Processes.Vita;
+using RomPackTool.Core.Processing;
+using RomPackTool.Core.PSV;
+using RomPackTool.Core.RMPK;
+using RomPackTool.Core.Sony;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,45 +15,65 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace RomPackTool
+namespace RomPackTool.WinForms
 {
+    /// <summary>
+    /// The main form.
+    /// </summary>
     public partial class Main : Form
     {
+
+
+        /// <summary>
+        /// Construct the form.
+        /// </summary>
         public Main()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Set a few startup variables.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
             Icon = Properties.Resources.icon;
-            textBox2.Text = Properties.Settings.Default.VitaIP;
-            textBox3.Text = Properties.Settings.Default.VitaDumpDirectory;
+            txtVitaIp.Text = Properties.Settings.Default.VitaIP;
+            txtVitaDumpPath.Text = Properties.Settings.Default.VitaDumpDirectory;
         }
 
+        /// <summary>
+        /// Handle closing the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.VitaIP = textBox2.Text.Trim();
+            Properties.Settings.Default.VitaIP = txtVitaIp.Text.Trim();
             Properties.Settings.Default.Save();
         }
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(textBox3.Text.Trim()))
+            
+
+            if (!Directory.Exists(txtVitaDumpPath.Text.Trim()))
             {
                 textBox1.AppendText($"The selected dump directory doesn't exist.");
                 return;
             }
             else
             {
-                Properties.Settings.Default.VitaDumpDirectory = textBox3.Text.Trim();
+                Properties.Settings.Default.VitaDumpDirectory = txtVitaDumpPath.Text.Trim();
                 Properties.Settings.Default.Save();
             }
 
             textBox1.Clear();
-            textBox1.AppendText($"Connecting to your Vita at {textBox2.Text.Trim()}:1337...\r\n");
+            textBox1.AppendText($"Connecting to your Vita at {txtVitaIp.Text.Trim()}:1337...\r\n");
 
-            var client = new FtpClient($"ftp://{textBox2.Text.Trim()}", 1337, new NetworkCredential(string.Empty, string.Empty))
+            var client = new FtpClient($"ftp://{txtVitaIp.Text.Trim()}", 1337, new NetworkCredential(string.Empty, string.Empty))
             {
                 DataConnectionType = FtpDataConnectionType.AutoActive
             };
@@ -114,10 +134,10 @@ namespace RomPackTool
             rmp.Header.ContentDescriptor = "NoNpDrmGame";
 
             // Migrate the incoming FTP files.
-            rmp.Files = files.ToList<RomPackFileEntry>();
+            rmp.Files = files.ToList<FileEntry>();
 
             // Add the license file to the list.
-            rmp.Files.Add(new RomPackFtpFileEntry
+            rmp.Files.Add(new FtpFileEntry
             {
                 FtpPath = licenseFilePath,
                 Path = $"/{titleID}/sce_sys/package/work.bin",
@@ -143,10 +163,10 @@ namespace RomPackTool
             await client.DisconnectAsync();
         }
 
-        private async Task<IEnumerable<RomPackFtpFileEntry>> ProcessDirectory(FtpClient client, string path, IProgress<string> progress)
+        private async Task<IEnumerable<FtpFileEntry>> ProcessDirectory(FtpClient client, string path, IProgress<string> progress)
         {
             // Create our list of files
-            var files = new List<RomPackFtpFileEntry>();
+            var files = new List<FtpFileEntry>();
 
             // Move to the directory
             client.SetWorkingDirectory(path);
@@ -160,7 +180,7 @@ namespace RomPackTool
                 switch (item.Type)
                 {
                     case FtpFileSystemObjectType.File:
-                        files.Add(new RomPackFtpFileEntry
+                        files.Add(new FtpFileEntry
                         {
                             FtpPath = item.FullName,
                             Path = item.FullName.Replace("/gro0:/app", string.Empty),
@@ -306,7 +326,7 @@ namespace RomPackTool
             }
 
             using var nndBr = new BinaryReaderX(File.OpenRead(noNpDrmRifPath));
-            var noNpDrmRif = nndBr.ReadType<VitaRIF>();
+            var noNpDrmRif = nndBr.ReadType<VitaRif>();
             nndBr.BaseStream.Position = 0;
             progress.Report(new ProgressReport { Message = $"Loaded {Path.GetFileName(noNpDrmRifPath)}..." });
 
@@ -357,7 +377,7 @@ namespace RomPackTool
             progress.Report(new ProgressReport { Message = $"License offset found!" });
 
             br.BaseStream.Position = licenseOffset;
-            var ogRif = br.ReadType<VitaRIF>();
+            var ogRif = br.ReadType<VitaRif>();
 
             // Final sanity check.
             if (ogRif.TitleID != noNpDrmRif.TitleID)
@@ -457,7 +477,7 @@ namespace RomPackTool
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                textBox3.Text = ofd.SelectedPath;
+                txtVitaDumpPath.Text = ofd.SelectedPath;
                 Properties.Settings.Default.VitaDumpDirectory = ofd.SelectedPath;
                 Properties.Settings.Default.Save();
             }
@@ -528,7 +548,7 @@ namespace RomPackTool
                     ProcessExFatDirectory(partition, $@"\{item.Path}", titleID);
                 else
                 {
-                    var outPath = Path.Combine(textBox3.Text.Trim(), "Vita", titleID, item.Path.Replace($@"app\{titleID}\", string.Empty));
+                    var outPath = Path.Combine(txtVitaDumpPath.Text.Trim(), "Vita", titleID, item.Path.Replace($@"app\{titleID}\", string.Empty));
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                     var outFile = File.Create(outPath);
                     var file = partition.Open(item.Path, FileMode.Open, FileAccess.Read);
@@ -538,5 +558,20 @@ namespace RomPackTool
                 }
             }
         }
+
+        private void btnTestTask_Click(object sender, EventArgs e)
+        {
+            var ipAddress = txtVitaIp.Text.Trim();
+            var outputPath = txtVitaDumpPath.Text.Trim();
+            var process = new FtpDownloadCartToNoNpDrm(ipAddress, outputPath);
+
+            var pm = new ProcessMonitor(process);
+            flpProcesses.Controls.Add(pm);
+        }
+
+        //private void StartProcess(Process process)
+        //{
+
+        //}
     }
 }

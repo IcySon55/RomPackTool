@@ -1,4 +1,4 @@
-﻿namespace RomPackTool
+﻿namespace RomPackTool.WinForms
 {
     /// <summary>
     /// 

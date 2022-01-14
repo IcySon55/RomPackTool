@@ -5,11 +5,8 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <StartupObject>RomPackTool.WinForms.Program</StartupObject>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="RMPK\RomPackConverter.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentFTP" Version="35.2.3" />
@@ -48,6 +45,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RomPackTool.Core\RomPackTool.Core.csproj">
+      <Private>true</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
