@@ -40,28 +40,30 @@ namespace RomPackTool.WinForms
             this.btnBrowseVitaDumps = new System.Windows.Forms.Button();
             this.txtVitaDumpPath = new System.Windows.Forms.TextBox();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.splMain = new System.Windows.Forms.SplitContainer();
+            this.btnTestTask = new System.Windows.Forms.Button();
+            this.flpProcesses = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnExtractNoNpDrm = new System.Windows.Forms.Button();
             this.btnCreateNoIntroPSV = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnBuildRomPack = new System.Windows.Forms.Button();
-            this.splMain = new System.Windows.Forms.SplitContainer();
-            this.flpProcesses = new System.Windows.Forms.FlowLayoutPanel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.btnTestTask = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.pnlMain.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splMain)).BeginInit();
             this.splMain.Panel1.SuspendLayout();
             this.splMain.Panel2.SuspendLayout();
             this.splMain.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(425, 156);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(316, 21);
@@ -69,9 +71,6 @@ namespace RomPackTool.WinForms
             // 
             // textBox1
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Location = new System.Drawing.Point(425, 23);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -79,10 +78,10 @@ namespace RomPackTool.WinForms
             this.textBox1.Size = new System.Drawing.Size(316, 127);
             this.textBox1.TabIndex = 2;
             // 
-            // textBox2
+            // txtVitaIp
             // 
             this.txtVitaIp.Location = new System.Drawing.Point(136, 22);
-            this.txtVitaIp.Name = "textBox2";
+            this.txtVitaIp.Name = "txtVitaIp";
             this.txtVitaIp.Size = new System.Drawing.Size(149, 23);
             this.txtVitaIp.TabIndex = 3;
             // 
@@ -149,15 +148,16 @@ namespace RomPackTool.WinForms
             this.btnBrowseVitaDumps.UseVisualStyleBackColor = true;
             this.btnBrowseVitaDumps.Click += new System.EventHandler(this.btnBrowseVitaDumps_Click);
             // 
-            // textBox3
+            // txtVitaDumpPath
             // 
             this.txtVitaDumpPath.Location = new System.Drawing.Point(87, 103);
-            this.txtVitaDumpPath.Name = "textBox3";
+            this.txtVitaDumpPath.Name = "txtVitaDumpPath";
             this.txtVitaDumpPath.Size = new System.Drawing.Size(198, 23);
             this.txtVitaDumpPath.TabIndex = 6;
             // 
             // pnlMain
             // 
+            this.pnlMain.Controls.Add(this.panel1);
             this.pnlMain.Controls.Add(this.statusStrip1);
             this.pnlMain.Controls.Add(this.splMain);
             this.pnlMain.Controls.Add(this.groupBox3);
@@ -171,6 +171,74 @@ namespace RomPackTool.WinForms
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(977, 547);
             this.pnlMain.TabIndex = 8;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.flowLayoutPanel1);
+            this.panel1.Location = new System.Drawing.Point(766, 63);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(200, 146);
+            this.panel1.TabIndex = 12;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(35, 30);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 100);
+            this.flowLayoutPanel1.TabIndex = 0;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 525);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(977, 22);
+            this.statusStrip1.TabIndex = 11;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // splMain
+            // 
+            this.splMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splMain.Cursor = System.Windows.Forms.Cursors.VSplit;
+            this.splMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splMain.IsSplitterFixed = true;
+            this.splMain.Location = new System.Drawing.Point(400, 215);
+            this.splMain.Name = "splMain";
+            // 
+            // splMain.Panel1
+            // 
+            this.splMain.Panel1.Controls.Add(this.btnTestTask);
+            this.splMain.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splMain_Panel1_Paint);
+            // 
+            // splMain.Panel2
+            // 
+            this.splMain.Panel2.Controls.Add(this.flpProcesses);
+            this.splMain.Panel2MinSize = 200;
+            this.splMain.Size = new System.Drawing.Size(574, 307);
+            this.splMain.SplitterDistance = 347;
+            this.splMain.TabIndex = 10;
+            // 
+            // btnTestTask
+            // 
+            this.btnTestTask.Location = new System.Drawing.Point(3, 3);
+            this.btnTestTask.Name = "btnTestTask";
+            this.btnTestTask.Size = new System.Drawing.Size(198, 46);
+            this.btnTestTask.TabIndex = 0;
+            this.btnTestTask.Text = "Test Button";
+            this.btnTestTask.UseVisualStyleBackColor = true;
+            this.btnTestTask.Click += new System.EventHandler(this.btnTestTask_Click);
+            // 
+            // flpProcesses
+            // 
+            this.flpProcesses.AutoScroll = true;
+            this.flpProcesses.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpProcesses.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpProcesses.Location = new System.Drawing.Point(0, 0);
+            this.flpProcesses.Name = "flpProcesses";
+            this.flpProcesses.Size = new System.Drawing.Size(223, 307);
+            this.flpProcesses.TabIndex = 0;
+            this.flpProcesses.WrapContents = false;
             // 
             // groupBox3
             // 
@@ -225,53 +293,6 @@ namespace RomPackTool.WinForms
             this.btnBuildRomPack.UseVisualStyleBackColor = true;
             this.btnBuildRomPack.Click += new System.EventHandler(this.btnBuildRomPack_Click);
             // 
-            // splMain
-            // 
-            this.splMain.Cursor = System.Windows.Forms.Cursors.VSplit;
-            this.splMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splMain.IsSplitterFixed = true;
-            this.splMain.Location = new System.Drawing.Point(414, 215);
-            this.splMain.Name = "splMain";
-            // 
-            // splMain.Panel1
-            // 
-            this.splMain.Panel1.Controls.Add(this.btnTestTask);
-            // 
-            // splMain.Panel2
-            // 
-            this.splMain.Panel2.Controls.Add(this.flpProcesses);
-            this.splMain.Panel2MinSize = 200;
-            this.splMain.Size = new System.Drawing.Size(542, 276);
-            this.splMain.SplitterDistance = 329;
-            this.splMain.TabIndex = 10;
-            // 
-            // flpProcesses
-            // 
-            this.flpProcesses.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flpProcesses.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpProcesses.Location = new System.Drawing.Point(0, 0);
-            this.flpProcesses.Name = "flpProcesses";
-            this.flpProcesses.Size = new System.Drawing.Size(209, 276);
-            this.flpProcesses.TabIndex = 0;
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 525);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(977, 22);
-            this.statusStrip1.TabIndex = 11;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // btnTestTask
-            // 
-            this.btnTestTask.Location = new System.Drawing.Point(38, 41);
-            this.btnTestTask.Name = "btnTestTask";
-            this.btnTestTask.Size = new System.Drawing.Size(198, 46);
-            this.btnTestTask.TabIndex = 0;
-            this.btnTestTask.Text = "Test Button";
-            this.btnTestTask.UseVisualStyleBackColor = true;
-            this.btnTestTask.Click += new System.EventHandler(this.btnTestTask_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -286,12 +307,13 @@ namespace RomPackTool.WinForms
             this.groupBox1.PerformLayout();
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.splMain.Panel1.ResumeLayout(false);
             this.splMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splMain)).EndInit();
             this.splMain.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -317,6 +339,8 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.FlowLayoutPanel flpProcesses;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Button btnTestTask;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
 

@@ -13,9 +13,9 @@ namespace RomPackTool.Core.Processes.Vita
         /// <summary>
         /// 
         /// </summary>
-        private string _ipAddress {  get; }
+        private string _ipAddress { get; }
 
-        private string _outputPath {  get; }
+        private string _outputPath { get; }
 
         public FtpDownloadCartToNoNpDrm(string ipAddress, string outputPath)
         {
@@ -41,19 +41,46 @@ namespace RomPackTool.Core.Processes.Vita
         /// <returns></returns>
         public override async Task<bool> Run(IProgress<ProgressReport> progress, CancellationToken token)
         {
-            progress.Report(new ProgressReport { Percentage = 0 });
+            try
+            {
+                progress.Report(new ProgressReport { Percentage = 0 });
 
-            await Task.Delay(1000);
+                await Task.Delay(2000, token);
 
-            progress.Report(new ProgressReport { Percentage = 50 });
+                if (token.IsCancellationRequested)
+                {
+                    State = ProcessState.Cancelled;
+                    return false;
+                }
 
-            await Task.Delay(1000);
+                for (var i = 0; i < 100; i++)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        State = ProcessState.Cancelled;
+                        return false;
+                    }
 
-            progress.Report(new ProgressReport { Percentage = 100 });
+                    await Task.Delay(50, token);
 
-            await Task.Delay(200);
+                    progress.Report(new ProgressReport { Percentage = i + 1 });
+                }
 
-            return true;
+                await Task.Delay(1500); // Not cancellable, this is for visual flair.
+
+                return true;
+            }
+            catch (TaskCanceledException)
+            {
+                State = ProcessState.Cancelled;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                State = ProcessState.Error;
+                progress.Report(new ProgressReport { Message = ex.Message });
+                return false;
+            }
         }
     }
 }

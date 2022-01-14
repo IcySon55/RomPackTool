@@ -42,6 +42,9 @@ namespace RomPackTool.WinForms
             Icon = Properties.Resources.icon;
             txtVitaIp.Text = Properties.Settings.Default.VitaIP;
             txtVitaDumpPath.Text = Properties.Settings.Default.VitaDumpDirectory;
+
+            //flpProcesses.ShowScrollBar(ScrollBarDirection.SB_VERT);
+            flpProcesses.VerticalScroll.Visible = true;
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace RomPackTool.WinForms
 
         private async void button2_Click(object sender, EventArgs e)
         {
-            
+
 
             if (!Directory.Exists(txtVitaDumpPath.Text.Trim()))
             {
@@ -559,7 +562,7 @@ namespace RomPackTool.WinForms
             }
         }
 
-        private void btnTestTask_Click(object sender, EventArgs e)
+        private async void btnTestTask_Click(object sender, EventArgs e)
         {
             var ipAddress = txtVitaIp.Text.Trim();
             var outputPath = txtVitaDumpPath.Text.Trim();
@@ -567,6 +570,22 @@ namespace RomPackTool.WinForms
 
             var pm = new ProcessMonitor(process);
             flpProcesses.Controls.Add(pm);
+            flpProcesses.SetFlowBreak(pm, true);
+
+            pm.CloseEvent += (sender, e) =>
+            {
+                flpProcesses.Controls.Remove(pm);
+            };
+
+            var result = await pm.Run();
+
+            if (result)
+                flpProcesses.Controls.Remove(pm);
+        }
+
+        private void splMain_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
 
         //private void StartProcess(Process process)

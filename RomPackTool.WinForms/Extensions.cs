@@ -21,6 +21,17 @@ namespace RomPackTool.WinForms
         static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr w, IntPtr l);
 
         /// <summary>
+        /// Allows us to force a scrollbar to be visible.
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="wBar"></param>
+        /// <param name="bShow"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool ShowScrollBar(IntPtr hWnd, int wBar, bool bShow);
+
+        /// <summary>
         /// Sets the state of the progress bar. (Changes bar color.)
         /// </summary>
         /// <param name="pbr"></param>
@@ -30,6 +41,20 @@ namespace RomPackTool.WinForms
             try
             {
                 SendMessage(pbr.Handle, 1040, (IntPtr)state, IntPtr.Zero);
+            }
+            catch (Exception) { }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctrl"></param>
+        /// <param name="direction"></param>
+        public static void ShowScrollBar(this ScrollableControl ctrl, ScrollBarDirection direction)
+        {
+            try
+            {
+                ShowScrollBar(ctrl.Handle, (int)direction, true);
             }
             catch (Exception) { }
         }

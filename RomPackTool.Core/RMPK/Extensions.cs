@@ -68,7 +68,7 @@ namespace RomPackTool.Core.RMPK
                 await Task.Delay(1);
 
                 // Download the file over FTP;
-                var ftpFileStream = await client.OpenReadAsync(ftpFile.FtpPath, FtpDataType.Binary);
+                var ftpFileStream = await client.OpenReadAsync(ftpFile.FtpPath, FtpDataType.Binary, 0);
                 await ftpFileStream.CopyToAsync(bw.BaseStream);
                 ftpFileStream.Close();
                 await client.GetReplyAsync(new System.Threading.CancellationToken(false));
