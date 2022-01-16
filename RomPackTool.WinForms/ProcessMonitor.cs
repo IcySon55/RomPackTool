@@ -126,7 +126,7 @@ namespace RomPackTool.WinForms
             progressBar1.Update();
 
             // Allows the progress bar to complete its animation
-            await Task.Delay(100);
+            await Task.Delay(1000);
 
             return result;
         }

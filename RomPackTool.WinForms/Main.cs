@@ -46,9 +46,6 @@ namespace RomPackTool.WinForms
             Icon = Properties.Resources.icon;
             txtVitaIp.Text = Properties.Settings.Default.VitaIP;
             txtVitaDumpPath.Text = Properties.Settings.Default.VitaDumpDirectory;
-
-            //flpProcesses.ShowScrollBar(ScrollBarDirection.SB_VERT);
-            flpProcesses.VerticalScroll.Visible = true;
         }
 
         /// <summary>
@@ -586,6 +583,5 @@ namespace RomPackTool.WinForms
             if (result)
                 flpProcesses.Controls.Remove(pm);
         }
-
     }
 }

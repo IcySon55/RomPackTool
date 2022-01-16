@@ -39,7 +39,6 @@ namespace RomPackTool.WinForms
             this.btnBrowseVitaDumps = new System.Windows.Forms.Button();
             this.txtVitaDumpPath = new System.Windows.Forms.TextBox();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.splMain = new System.Windows.Forms.SplitContainer();
             this.tbsMain = new System.Windows.Forms.TabControl();
             this.tabVita = new System.Windows.Forms.TabPage();
             this.btnTestTask = new System.Windows.Forms.Button();
@@ -52,14 +51,11 @@ namespace RomPackTool.WinForms
             this.btnBuildRomPack = new System.Windows.Forms.Button();
             this.tabLog = new System.Windows.Forms.TabPage();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.lblDivider = new System.Windows.Forms.Label();
             this.flpProcesses = new System.Windows.Forms.FlowLayoutPanel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.groupBox1.SuspendLayout();
             this.pnlMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splMain)).BeginInit();
-            this.splMain.Panel1.SuspendLayout();
-            this.splMain.Panel2.SuspendLayout();
-            this.splMain.SuspendLayout();
             this.tbsMain.SuspendLayout();
             this.tabVita.SuspendLayout();
             this.tabPSV.SuspendLayout();
@@ -71,11 +67,11 @@ namespace RomPackTool.WinForms
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(6, 8);
+            this.textBox1.Location = new System.Drawing.Point(6, 6);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(239, 100);
+            this.textBox1.Size = new System.Drawing.Size(724, 458);
             this.textBox1.TabIndex = 2;
             // 
             // txtVitaIp
@@ -157,35 +153,15 @@ namespace RomPackTool.WinForms
             // 
             // pnlMain
             // 
-            this.pnlMain.Controls.Add(this.splMain);
+            this.pnlMain.Controls.Add(this.tbsMain);
+            this.pnlMain.Controls.Add(this.progressBar1);
+            this.pnlMain.Controls.Add(this.lblDivider);
+            this.pnlMain.Controls.Add(this.flpProcesses);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.pnlMain.Margin = new System.Windows.Forms.Padding(0);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Padding = new System.Windows.Forms.Padding(3);
             this.pnlMain.Size = new System.Drawing.Size(977, 525);
             this.pnlMain.TabIndex = 8;
-            // 
-            // splMain
-            // 
-            this.splMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splMain.IsSplitterFixed = true;
-            this.splMain.Location = new System.Drawing.Point(3, 3);
-            this.splMain.Name = "splMain";
-            // 
-            // splMain.Panel1
-            // 
-            this.splMain.Panel1.Controls.Add(this.tbsMain);
-            this.splMain.Panel1.Controls.Add(this.progressBar1);
-            // 
-            // splMain.Panel2
-            // 
-            this.splMain.Panel2.Controls.Add(this.flpProcesses);
-            this.splMain.Panel2MinSize = 200;
-            this.splMain.Size = new System.Drawing.Size(971, 519);
-            this.splMain.SplitterDistance = 744;
-            this.splMain.TabIndex = 10;
             // 
             // tbsMain
             // 
@@ -193,11 +169,10 @@ namespace RomPackTool.WinForms
             this.tbsMain.Controls.Add(this.tabPSV);
             this.tbsMain.Controls.Add(this.tabRomPack);
             this.tbsMain.Controls.Add(this.tabLog);
-            this.tbsMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbsMain.Location = new System.Drawing.Point(0, 0);
+            this.tbsMain.Location = new System.Drawing.Point(70, 32);
             this.tbsMain.Name = "tbsMain";
             this.tbsMain.SelectedIndex = 0;
-            this.tbsMain.Size = new System.Drawing.Size(744, 498);
+            this.tbsMain.Size = new System.Drawing.Size(579, 345);
             this.tbsMain.TabIndex = 1;
             // 
             // tabVita
@@ -207,7 +182,7 @@ namespace RomPackTool.WinForms
             this.tabVita.Location = new System.Drawing.Point(4, 24);
             this.tabVita.Name = "tabVita";
             this.tabVita.Padding = new System.Windows.Forms.Padding(3);
-            this.tabVita.Size = new System.Drawing.Size(736, 470);
+            this.tabVita.Size = new System.Drawing.Size(571, 317);
             this.tabVita.TabIndex = 0;
             this.tabVita.Text = "Vita";
             this.tabVita.UseVisualStyleBackColor = true;
@@ -228,7 +203,7 @@ namespace RomPackTool.WinForms
             this.tabPSV.Location = new System.Drawing.Point(4, 24);
             this.tabPSV.Name = "tabPSV";
             this.tabPSV.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPSV.Size = new System.Drawing.Size(736, 470);
+            this.tabPSV.Size = new System.Drawing.Size(571, 317);
             this.tabPSV.TabIndex = 3;
             this.tabPSV.Text = "PSV";
             this.tabPSV.UseVisualStyleBackColor = true;
@@ -270,7 +245,7 @@ namespace RomPackTool.WinForms
             this.tabRomPack.Location = new System.Drawing.Point(4, 24);
             this.tabRomPack.Name = "tabRomPack";
             this.tabRomPack.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRomPack.Size = new System.Drawing.Size(736, 470);
+            this.tabRomPack.Size = new System.Drawing.Size(571, 317);
             this.tabRomPack.TabIndex = 1;
             this.tabRomPack.Text = "RomPack";
             this.tabRomPack.UseVisualStyleBackColor = true;
@@ -303,27 +278,36 @@ namespace RomPackTool.WinForms
             this.tabLog.Location = new System.Drawing.Point(4, 24);
             this.tabLog.Name = "tabLog";
             this.tabLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLog.Size = new System.Drawing.Size(736, 470);
+            this.tabLog.Size = new System.Drawing.Size(571, 317);
             this.tabLog.TabIndex = 2;
             this.tabLog.Text = "Log";
             this.tabLog.UseVisualStyleBackColor = true;
             // 
             // progressBar1
             // 
-            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 498);
+            this.progressBar1.Location = new System.Drawing.Point(70, 383);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(744, 21);
+            this.progressBar1.Size = new System.Drawing.Size(579, 21);
             this.progressBar1.TabIndex = 1;
+            // 
+            // lblDivider
+            // 
+            this.lblDivider.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblDivider.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblDivider.Location = new System.Drawing.Point(748, 0);
+            this.lblDivider.Name = "lblDivider";
+            this.lblDivider.Size = new System.Drawing.Size(2, 525);
+            this.lblDivider.TabIndex = 2;
             // 
             // flpProcesses
             // 
             this.flpProcesses.AutoScroll = true;
-            this.flpProcesses.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flpProcesses.Dock = System.Windows.Forms.DockStyle.Right;
             this.flpProcesses.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpProcesses.Location = new System.Drawing.Point(0, 0);
+            this.flpProcesses.Location = new System.Drawing.Point(750, 0);
             this.flpProcesses.Name = "flpProcesses";
-            this.flpProcesses.Size = new System.Drawing.Size(223, 519);
+            this.flpProcesses.Padding = new System.Windows.Forms.Padding(0, 0, 5, 5);
+            this.flpProcesses.Size = new System.Drawing.Size(227, 525);
             this.flpProcesses.TabIndex = 0;
             this.flpProcesses.WrapContents = false;
             // 
@@ -349,10 +333,6 @@ namespace RomPackTool.WinForms
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.pnlMain.ResumeLayout(false);
-            this.splMain.Panel1.ResumeLayout(false);
-            this.splMain.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splMain)).EndInit();
-            this.splMain.ResumeLayout(false);
             this.tbsMain.ResumeLayout(false);
             this.tabVita.ResumeLayout(false);
             this.tabPSV.ResumeLayout(false);
@@ -382,7 +362,6 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.TextBox txtVitaDumpPath;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnExtractNoNpDrm;
-        private System.Windows.Forms.SplitContainer splMain;
         private System.Windows.Forms.FlowLayoutPanel flpProcesses;
         private System.Windows.Forms.Button btnTestTask;
         private System.Windows.Forms.TabControl tbsMain;
@@ -392,6 +371,7 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TabPage tabPSV;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.Label lblDivider;
     }
 }
 

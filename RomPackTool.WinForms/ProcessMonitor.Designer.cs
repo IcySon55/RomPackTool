@@ -160,6 +160,7 @@ namespace RomPackTool.WinForms
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tspCommon);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 0, 0);
             this.Name = "ProcessMonitor";
             this.Size = new System.Drawing.Size(198, 148);
             this.tspCommon.ResumeLayout(false);
