@@ -63,7 +63,7 @@ namespace RomPackTool.Core.RMPK
                 progress.Report(new ProgressReport
                 {
                     Message = $"Dumping... {Path.GetFileName(file.Path)} ({file.Size.ToSizeString()}) [{i + 1} of {Files.Count}]",
-                    Percentage = i
+                    Value = i
                 });
                 await Task.Delay(1);
 
@@ -74,7 +74,7 @@ namespace RomPackTool.Core.RMPK
                 await client.GetReplyAsync(new System.Threading.CancellationToken(false));
 
                 // Update the UI.
-                progress.Report(new ProgressReport { Percentage = i + 1 });
+                progress.Report(new ProgressReport { Value = i + 1 });
 
                 // Alignment.
                 bw.WriteAlignment(RomPack.FileAlignment);

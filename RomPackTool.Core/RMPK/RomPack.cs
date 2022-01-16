@@ -108,7 +108,7 @@ namespace RomPackTool.Core.RMPK
                 progress.Report(new ProgressReport
                 {
                     Message = $"File {i + 1} of {Files.Count}",
-                    Percentage = i + 1
+                    Value = i + 1
                 });
 
                 // Alignment.

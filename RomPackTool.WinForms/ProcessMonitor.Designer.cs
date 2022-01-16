@@ -29,25 +29,27 @@ namespace RomPackTool.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProcessMonitor));
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tspCommon = new System.Windows.Forms.ToolStrip();
             this.tslName = new System.Windows.Forms.ToolStripLabel();
             this.tsbCancel = new System.Windows.Forms.ToolStripButton();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.lblMessage = new System.Windows.Forms.Label();
+            this.lblFile = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.lblStatusLabel = new System.Windows.Forms.Label();
             this.lblFileLabel = new System.Windows.Forms.Label();
             this.tspCommon.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.pnlMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // progressBar1
             // 
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(2, 98);
+            this.progressBar1.Location = new System.Drawing.Point(2, 100);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(194, 23);
+            this.progressBar1.Size = new System.Drawing.Size(194, 21);
             this.progressBar1.TabIndex = 0;
             // 
             // tspCommon
@@ -61,7 +63,6 @@ namespace RomPackTool.WinForms
             this.tspCommon.Padding = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tspCommon.Size = new System.Drawing.Size(198, 25);
             this.tspCommon.TabIndex = 1;
-            this.tspCommon.Text = "toolStrip1";
             // 
             // tslName
             // 
@@ -73,41 +74,71 @@ namespace RomPackTool.WinForms
             // 
             this.tsbCancel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.tsbCancel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbCancel.Image = ((System.Drawing.Image)(resources.GetObject("tsbCancel.Image")));
+            this.tsbCancel.Image = global::RomPackTool.WinForms.Properties.Resources.cancel;
             this.tsbCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCancel.Name = "tsbCancel";
             this.tsbCancel.Size = new System.Drawing.Size(23, 22);
             this.tsbCancel.Text = "Cancel";
             this.tsbCancel.Click += new System.EventHandler(this.tsbCancel_Click);
             // 
-            // panel1
+            // pnlMain
             // 
-            this.panel1.Controls.Add(this.lblStatus);
-            this.panel1.Controls.Add(this.lblStatusLabel);
-            this.panel1.Controls.Add(this.lblFileLabel);
-            this.panel1.Controls.Add(this.progressBar1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 25);
-            this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(2);
-            this.panel1.Size = new System.Drawing.Size(198, 123);
-            this.panel1.TabIndex = 2;
+            this.pnlMain.BackColor = System.Drawing.SystemColors.Window;
+            this.pnlMain.Controls.Add(this.lblMessage);
+            this.pnlMain.Controls.Add(this.lblFile);
+            this.pnlMain.Controls.Add(this.label1);
+            this.pnlMain.Controls.Add(this.lblStatus);
+            this.pnlMain.Controls.Add(this.lblStatusLabel);
+            this.pnlMain.Controls.Add(this.lblFileLabel);
+            this.pnlMain.Controls.Add(this.progressBar1);
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(0, 25);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Padding = new System.Windows.Forms.Padding(2);
+            this.pnlMain.Size = new System.Drawing.Size(198, 123);
+            this.pnlMain.TabIndex = 2;
+            // 
+            // lblMessage
+            // 
+            this.lblMessage.Location = new System.Drawing.Point(64, 27);
+            this.lblMessage.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(129, 45);
+            this.lblMessage.TabIndex = 6;
+            // 
+            // lblFile
+            // 
+            this.lblFile.Location = new System.Drawing.Point(64, 5);
+            this.lblFile.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
+            this.lblFile.Name = "lblFile";
+            this.lblFile.Size = new System.Drawing.Size(129, 16);
+            this.lblFile.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(5, 27);
+            this.label1.Margin = new System.Windows.Forms.Padding(3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 16);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Message:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // lblStatus
             // 
             this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.lblStatus.Location = new System.Drawing.Point(59, 76);
-            this.lblStatus.Margin = new System.Windows.Forms.Padding(3);
+            this.lblStatus.Location = new System.Drawing.Point(64, 78);
+            this.lblStatus.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(134, 16);
+            this.lblStatus.Size = new System.Drawing.Size(129, 16);
             this.lblStatus.TabIndex = 3;
             // 
             // lblStatusLabel
             // 
-            this.lblStatusLabel.Location = new System.Drawing.Point(5, 76);
+            this.lblStatusLabel.Location = new System.Drawing.Point(5, 78);
             this.lblStatusLabel.Margin = new System.Windows.Forms.Padding(3);
             this.lblStatusLabel.Name = "lblStatusLabel";
-            this.lblStatusLabel.Size = new System.Drawing.Size(48, 16);
+            this.lblStatusLabel.Size = new System.Drawing.Size(56, 16);
             this.lblStatusLabel.TabIndex = 2;
             this.lblStatusLabel.Text = "Status:";
             this.lblStatusLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -117,7 +148,7 @@ namespace RomPackTool.WinForms
             this.lblFileLabel.Location = new System.Drawing.Point(5, 5);
             this.lblFileLabel.Margin = new System.Windows.Forms.Padding(3);
             this.lblFileLabel.Name = "lblFileLabel";
-            this.lblFileLabel.Size = new System.Drawing.Size(48, 16);
+            this.lblFileLabel.Size = new System.Drawing.Size(56, 16);
             this.lblFileLabel.TabIndex = 1;
             this.lblFileLabel.Text = "File:";
             this.lblFileLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -127,13 +158,13 @@ namespace RomPackTool.WinForms
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.tspCommon);
             this.Name = "ProcessMonitor";
             this.Size = new System.Drawing.Size(198, 148);
             this.tspCommon.ResumeLayout(false);
             this.tspCommon.PerformLayout();
-            this.panel1.ResumeLayout(false);
+            this.pnlMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,9 +176,12 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.ToolStrip tspCommon;
         private System.Windows.Forms.ToolStripLabel tslName;
         private System.Windows.Forms.ToolStripButton tsbCancel;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.Label lblFileLabel;
         private System.Windows.Forms.Label lblStatusLabel;
         private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.Label lblMessage;
+        private System.Windows.Forms.Label lblFile;
+        private System.Windows.Forms.Label label1;
     }
 }

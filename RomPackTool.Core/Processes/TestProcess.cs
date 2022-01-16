@@ -3,49 +3,44 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RomPackTool.Core.Processes.Vita
+namespace RomPackTool.Core.Processes
 {
     /// <summary>
     /// Downloads a Vita Cartridge as a NoNpDrm RomPack archive.
     /// </summary>
-    public class FtpDownloadCartToNoNpDrm : Process
+    public class TestProcess : Process
     {
         /// <summary>
-        /// 
+        /// Instantiates the <see cref="TestProcess"/>, for testing~
         /// </summary>
-        private string _ipAddress { get; }
-
-        private string _outputPath { get; }
-
-        public FtpDownloadCartToNoNpDrm(string ipAddress, string outputPath)
+        public TestProcess(IProgress<ProgressReport> progress) : base(progress)
         {
-            Name = "Vita Cart to NoNpDrm";
-            ExclusivityGroup = "FTP"; // Only one FTP operation at a time (on the same IP)
-            _ipAddress = ipAddress;
-            _outputPath = outputPath;
+            Name = "Test Process";
+            Progress = progress;
         }
 
         /// <summary>
-        /// 
+        /// Always true for the test process.
         /// </summary>
         /// <returns></returns>
-        public override async Task<bool> Validate()
-        {
-            return true;
-        }
+        protected override async Task<bool> Validate(CancellationToken token) => true;
 
         /// <summary>
-        /// 
+        /// Executes nothing and moves the progress bar.
         /// </summary>
         /// <param name="progress"></param>
         /// <returns></returns>
-        public override async Task<bool> Run(IProgress<ProgressReport> progress, CancellationToken token)
+        public override async Task<bool> Run(CancellationToken token)
         {
+            // Update state.
+            State = ProcessState.Running;
+
             try
             {
-                progress.Report(new ProgressReport { Percentage = 0 });
+                Progress.Report(new ProgressReport { Value = 0 });
 
-                await Task.Delay(2000, token);
+                // Task start pause for effect.
+                await Task.Delay(1000, token);
 
                 if (token.IsCancellationRequested)
                 {
@@ -63,11 +58,10 @@ namespace RomPackTool.Core.Processes.Vita
 
                     await Task.Delay(50, token);
 
-                    progress.Report(new ProgressReport { Percentage = i + 1 });
+                    Progress.Report(new ProgressReport { Value = i + 1 });
                 }
 
-                await Task.Delay(1500); // Not cancellable, this is for visual flair.
-
+                State = ProcessState.Completed;
                 return true;
             }
             catch (TaskCanceledException)
@@ -78,7 +72,7 @@ namespace RomPackTool.Core.Processes.Vita
             catch (Exception ex)
             {
                 State = ProcessState.Error;
-                progress.Report(new ProgressReport { Message = ex.Message });
+                Progress.Report(new ProgressReport { Message = ex.Message });
                 return false;
             }
         }
