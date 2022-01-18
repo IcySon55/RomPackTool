@@ -13,10 +13,9 @@ namespace RomPackTool.Core.Processes
         /// <summary>
         /// Instantiates the <see cref="TestProcess"/>, for testing~
         /// </summary>
-        public TestProcess(IProgress<ProgressReport> progress) : base(progress)
+        public TestProcess()
         {
             Name = "Test Process";
-            Progress = progress;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace RomPackTool.Core.Processes
 
             try
             {
-                Progress.Report(new ProgressReport { Value = 0 });
+                Progress.Report(new ProgressReport { MaxValue = 100, Value = 0 });
 
                 // Task start pause for effect.
                 await Task.Delay(1000, token);

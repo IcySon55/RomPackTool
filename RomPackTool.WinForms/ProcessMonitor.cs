@@ -1,4 +1,5 @@
-﻿using RomPackTool.Core.Processing;
+﻿using RomPackTool.Core;
+using RomPackTool.Core.Processing;
 using RomPackTool.WinForms.Properties;
 using System;
 using System.Collections.Generic;
@@ -74,26 +75,33 @@ namespace RomPackTool.WinForms
             // Add a handler to the internal progress tracker.
             var progress = _process.Progress as Progress<ProgressReport>;
 
-            progress.ProgressChanged += (sender, report) =>
+            progress.ProgressChanged += (sender, progress) =>
             {
                 // Update progress.
-                progressBar1.Maximum = (int)report.MaxValue;
-                progressBar1.Value = (int)report.Value;
+                progressBar1.Maximum = (int)(progress.MaxValue > 0 ? progress.MaxValue : progressBar1.Maximum);
+                progressBar1.Value = (int)progress.Value;
 
                 // Update file.
-                if (report is FileReport file)
+                if (progress is FileReport file)
                 {
-                    if (file.HasMessage)
-                        lblFile.Text = file.Message;
+                    lblFile.Text = $"{file.FileName}";
+
+                    var lines = new List<string>();
+                    if (file.TotalFiles > 0)
+                        lines.Add($"{file.CurrentFile} of {file.TotalFiles}");
+                    if (file.FileSize > 0)
+                        lines.Add($"{file.FileSize.ToSizeString()}");
+
+                    lblFile2.Text = string.Join("\r\n", lines);
                 }
                 else
                 {
                     // Update the message.
-                    if (report.HasMessage)
-                        lblMessage.Text = report.Message;
+                    if (progress.HasMessage)
+                        lblMessage.Text = progress.Message;
 
                     // Report the progress to the parent UI.
-                    ProgressChanged?.Invoke(this, report);
+                    ProgressChanged?.Invoke(this, progress);
                 }
             };
 

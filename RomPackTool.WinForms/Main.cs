@@ -1,5 +1,4 @@
 ﻿using ExFat.Filesystem;
-using FluentFTP;
 using Komponent.IO;
 using Komponent.IO.Streams;
 using RomPackTool.Core.Processes;
@@ -12,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -56,7 +54,6 @@ namespace RomPackTool.WinForms
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Update settings from UI before closing.
-
             Properties.Settings.Default.VitaIP = txtVitaIp.Text.Trim();
             Properties.Settings.Default.VitaDumpDirectory = txtVitaDumpPath.Text.Trim();
 
@@ -65,124 +62,15 @@ namespace RomPackTool.WinForms
         }
 
 
-        private async void button2_Click(object sender, EventArgs e)
+        private async void btnVitaFtpToNoNpDrm_Click(object sender, EventArgs e)
         {
+            var ipAddress = txtVitaIp.Text.Trim();
+            var outputPath = txtVitaDumpPath.Text.Trim();
+            var process = new VitaFtpCartToNoNpDrm(ipAddress, outputPath);
 
-            //textBox1.AppendText($"Connected!\r\nValidating environment...\r\n");
+            tbsMain.SelectedTab = tabLog;
 
-            //// Get the titleID.
-            //client.SetWorkingDirectory("/gro0:/app");
-            //var titleID = client.GetListing().FirstOrDefault()?.Name;
-
-            //if (titleID == null)
-            //{
-            //    textBox1.Text = "A titleID could not be found on the game cart.";
-            //    return;
-            //}
-            //textBox1.AppendText($"Dumping title: {titleID}.\r\n");
-
-            //var titlePath = $"/gro0:/app/{titleID}";
-
-            //// Check if the NoNpDrm license has been created.
-            //var licensePath = $"/ux0:/nonpdrm/license/app/{titleID}";
-            //var licenseFileName = "6488b73b912a753a492e2714e9b38bc7.rif";
-            //var licenseFilePath = $"{licensePath}/{licenseFileName}";
-
-            //if (!client.DirectoryExists(licensePath))
-            //{
-            //    textBox1.Text = "Fake license not created. Run the game.";
-            //    return;
-            //}
-
-            //client.SetWorkingDirectory(licensePath);
-            //var result = await client.GetListingAsync();
-
-            //if (result.FirstOrDefault()?.Name != licenseFileName)
-            //{
-            //    textBox1.Text = "Fake license not created. Run the game.";
-            //    return;
-            //}
-
-            //// Set up the directories
-            //var dumpPath = Path.Combine(Properties.Settings.Default.VitaDumpDirectory, "Dumps", "Vita");
-            //Directory.CreateDirectory(dumpPath);
-
-            //// Build a list of the files to dump.
-            //textBox1.AppendText($"Listing files to dump...\r\n");
-            //var listingProgress = new Progress<string>(p => { textBox1.AppendText(p + "\r\n"); });
-            //var files = await ProcessDirectory(client, titlePath, listingProgress);
-
-            //// Build the RMP
-            //var rmp = new RomPack();
-            //rmp.Header.ContentDescriptor = "NoNpDrmGame";
-
-            //// Migrate the incoming FTP files.
-            //rmp.Files = files.ToList<FileEntry>();
-
-            //// Add the license file to the list.
-            //rmp.Files.Add(new FtpFileEntry
-            //{
-            //    FtpPath = licenseFilePath,
-            //    Path = $"/{titleID}/sce_sys/package/work.bin",
-            //    Size = result.First().Size
-            //});
-
-            //var fileCount = rmp.Files.Count();
-            //textBox1.AppendText($"Found {fileCount} file(s)!\r\n");
-
-            //progressBar1.Maximum = fileCount;
-            //var savingProgress = new Progress<ProcessReport>(p =>
-            //{
-            //    progressBar1.Value = (int)p.Value;
-            //    if (p.HasMessage)
-            //        textBox1.AppendText(p.Message + "\r\n");
-            //});
-            //var nndPath = Path.Combine(dumpPath, titleID + ".nonpdrm");
-            //await rmp.FtpSave(client, File.Create(nndPath), savingProgress);
-
-            //textBox1.AppendText($"Dumping complete!\r\nWrote dump to {nndPath}\r\n");
-
-            //// Disconnect from the Vita, dumping is complete.
-            //await client.DisconnectAsync();
-        }
-
-        private async Task<IEnumerable<FtpFileEntry>> ProcessDirectory(FtpClient client, string path, IProgress<string> progress)
-        {
-            // Create our list of files
-            var files = new List<FtpFileEntry>();
-
-            // Move to the directory
-            client.SetWorkingDirectory(path);
-
-            // List the items
-            var items = client.GetListing();
-
-            // Iterate through them and create the necessary objects.
-            foreach (var item in items)
-            {
-                switch (item.Type)
-                {
-                    case FtpFileSystemObjectType.File:
-                        files.Add(new FtpFileEntry
-                        {
-                            FtpPath = item.FullName,
-                            Path = item.FullName.Replace("/gro0:/app", string.Empty),
-                            Size = item.Size
-                        });
-                        progress.Report($"Added {item.Name}");
-                        await Task.Delay(1);
-                        break;
-                    case FtpFileSystemObjectType.Directory:
-                        var moreFiles = await ProcessDirectory(client, item.FullName, progress);
-                        files.AddRange(moreFiles);
-                        break;
-                    case FtpFileSystemObjectType.Link:
-                        break;
-                }
-            }
-
-            // Return our file list.
-            return files;
+            await RunProcess(process);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -542,22 +430,16 @@ namespace RomPackTool.WinForms
             }
         }
 
-        private void btnTestTask_Click(object sender, EventArgs e)
+        private async void btnTestTask_Click(object sender, EventArgs e)
         {
-            var ipAddress = txtVitaIp.Text.Trim();
-            var outputPath = txtVitaDumpPath.Text.Trim();
-            var process = new VitaFtpCartToNoNpDrm(new Progress<ProgressReport>(), ipAddress, outputPath);
-
-            RunProcess(process);
-
-            RunProcess(new TestProcess(new Progress<ProgressReport>()));
+            await RunProcess(new TestProcess());
         }
 
         /// <summary>
         /// Adds a new process to the list and begins execution.
         /// </summary>
         /// <param name="process"></param>
-        private async void RunProcess(Process process)
+        private async Task RunProcess(Process process)
         {
             // Can this process be added?
             if (_processes.Any(p => p.ExclusivityGroup == process.ExclusivityGroup))
@@ -566,22 +448,31 @@ namespace RomPackTool.WinForms
                 return;
             }
 
+            // Register this process.
+            _processes.Add(process);
+
+            // Create a new Process monitor for our process.
             var pm = new ProcessMonitor(process);
             flpProcesses.Controls.Add(pm);
-            //flpProcesses.SetFlowBreak(pm, true);
 
+            // Add a handler for updating the master log.
             pm.ProgressChanged += (sender, e) =>
             {
                 if (e.HasMessage)
                     textBox1.AppendText(e.Message + (e.NewLine ? "\r\n" : string.Empty));
             };
 
+            // Add a handler for removing the control when it is closed.
             pm.Close += (sender, e) => { flpProcesses.Controls.Remove(pm); };
 
+            // Run the process!
             var result = await pm.Run();
 
             if (result)
                 flpProcesses.Controls.Remove(pm);
+
+            // Unregister the process regardless of how it ended.
+            _processes.Remove(process);
         }
     }
 }

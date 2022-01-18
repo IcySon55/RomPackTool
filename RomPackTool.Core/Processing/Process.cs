@@ -22,21 +22,12 @@ namespace RomPackTool.Core.Processing
         /// <summary>
         /// Determines the current state of the running process.
         /// </summary>
-        public ProcessState State { get; protected set; } = ProcessState.None;
+        public ProcessState State { get; set; } = ProcessState.None;
 
         /// <summary>
         /// Reference to the <see cref="IProgress{T}"/> that was passed into <see cref="Run(IProgress{ProgressReport}, CancellationToken)"/>.
         /// </summary>
-        public IProgress<ProgressReport> Progress { get; protected set; }
-
-        /// <summary>
-        /// Forces child processes to provide a progress object.
-        /// </summary>
-        /// <param name="progress"></param>
-        public Process(IProgress<ProgressReport> progress)
-        {
-            Progress = progress ?? throw new ArgumentNullException(nameof(progress));
-        }
+        public IProgress<ProgressReport> Progress { get; protected set; } = new Progress<ProgressReport>();
 
         /// <summary>
         /// Called on by the UI to have the process validate its configuration.
@@ -52,17 +43,40 @@ namespace RomPackTool.Core.Processing
         public abstract Task<bool> Run(CancellationToken token);
 
         /// <summary>
-        /// Shortcut for simply reporting a message.
+        /// Shortcut for reporting a message.
         /// </summary>
         /// <param name="message"></param>
         protected void Report(string message)
         {
-            Progress?.Report(new ProgressReport
-            {
-                Message = message
-            });
+            Progress?.Report(new ProgressReport { Message = message });
         }
 
-        // TODO: Create more shortcuts for reporting
+        /// <summary>
+        /// Shortcut for reporting a filename to the UI.
+        /// </summary>
+        /// <param name="name"></param>
+        protected void ReportFile(string name, int totalFiles = 0, int currentFile = 0, long fileSize = 0)
+        {
+            Progress?.Report(new FileReport { FileName = name, TotalFiles = totalFiles, CurrentFile = currentFile, FileSize = fileSize });
+        }
+
+        /// <summary>
+        /// Shortcut for reporting a new progress value.
+        /// </summary>
+        /// <param name="value"></param>
+        protected void Report(int value)
+        {
+            Progress?.Report(new ProgressReport { Value = value });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="maxValue"></param>
+        /// <param name="value"></param>
+        protected void Report(int value, int maxValue)
+        {
+            Progress?.Report(new ProgressReport { MaxValue = maxValue, Value = value });
+        }
     }
 }

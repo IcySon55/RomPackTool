@@ -32,7 +32,7 @@ namespace RomPackTool.WinForms
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.txtVitaIp = new System.Windows.Forms.TextBox();
             this.lblIP = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnVitaFtpToNoNpDrm = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -53,7 +53,7 @@ namespace RomPackTool.WinForms
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.lblDivider = new System.Windows.Forms.Label();
             this.flpProcesses = new System.Windows.Forms.FlowLayoutPanel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.stsMain = new System.Windows.Forms.StatusStrip();
             this.groupBox1.SuspendLayout();
             this.pnlMain.SuspendLayout();
             this.tbsMain.SuspendLayout();
@@ -90,15 +90,15 @@ namespace RomPackTool.WinForms
             this.lblIP.TabIndex = 4;
             this.lblIP.Text = "Vita IP:";
             // 
-            // button2
+            // btnVitaFtpToNoNpDrm
             // 
-            this.button2.Location = new System.Drawing.Point(87, 51);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(198, 46);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Dump Cart to NoNpDrm\r\n";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnVitaFtpToNoNpDrm.Location = new System.Drawing.Point(87, 51);
+            this.btnVitaFtpToNoNpDrm.Name = "btnVitaFtpToNoNpDrm";
+            this.btnVitaFtpToNoNpDrm.Size = new System.Drawing.Size(198, 46);
+            this.btnVitaFtpToNoNpDrm.TabIndex = 5;
+            this.btnVitaFtpToNoNpDrm.Text = "Dump Cart to NoNpDrm\r\n";
+            this.btnVitaFtpToNoNpDrm.UseVisualStyleBackColor = true;
+            this.btnVitaFtpToNoNpDrm.Click += new System.EventHandler(this.btnVitaFtpToNoNpDrm_Click);
             // 
             // button3
             // 
@@ -115,10 +115,10 @@ namespace RomPackTool.WinForms
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.btnBrowseVitaDumps);
             this.groupBox1.Controls.Add(this.txtVitaDumpPath);
-            this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Controls.Add(this.btnVitaFtpToNoNpDrm);
             this.groupBox1.Controls.Add(this.lblIP);
             this.groupBox1.Controls.Add(this.txtVitaIp);
-            this.groupBox1.Location = new System.Drawing.Point(6, 16);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(382, 138);
             this.groupBox1.TabIndex = 7;
@@ -169,7 +169,7 @@ namespace RomPackTool.WinForms
             this.tbsMain.Controls.Add(this.tabPSV);
             this.tbsMain.Controls.Add(this.tabRomPack);
             this.tbsMain.Controls.Add(this.tabLog);
-            this.tbsMain.Location = new System.Drawing.Point(70, 32);
+            this.tbsMain.Location = new System.Drawing.Point(54, 46);
             this.tbsMain.Name = "tbsMain";
             this.tbsMain.SelectedIndex = 0;
             this.tbsMain.Size = new System.Drawing.Size(579, 345);
@@ -285,7 +285,7 @@ namespace RomPackTool.WinForms
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(70, 383);
+            this.progressBar1.Location = new System.Drawing.Point(54, 397);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(579, 21);
             this.progressBar1.TabIndex = 1;
@@ -294,7 +294,7 @@ namespace RomPackTool.WinForms
             // 
             this.lblDivider.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lblDivider.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblDivider.Location = new System.Drawing.Point(748, 0);
+            this.lblDivider.Location = new System.Drawing.Point(684, 0);
             this.lblDivider.Name = "lblDivider";
             this.lblDivider.Size = new System.Drawing.Size(2, 525);
             this.lblDivider.TabIndex = 2;
@@ -304,20 +304,20 @@ namespace RomPackTool.WinForms
             this.flpProcesses.AutoScroll = true;
             this.flpProcesses.Dock = System.Windows.Forms.DockStyle.Right;
             this.flpProcesses.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpProcesses.Location = new System.Drawing.Point(750, 0);
+            this.flpProcesses.Location = new System.Drawing.Point(686, 0);
             this.flpProcesses.Name = "flpProcesses";
             this.flpProcesses.Padding = new System.Windows.Forms.Padding(0, 0, 5, 5);
-            this.flpProcesses.Size = new System.Drawing.Size(227, 525);
+            this.flpProcesses.Size = new System.Drawing.Size(291, 525);
             this.flpProcesses.TabIndex = 0;
             this.flpProcesses.WrapContents = false;
             // 
-            // statusStrip1
+            // stsMain
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 525);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(977, 22);
-            this.statusStrip1.TabIndex = 9;
-            this.statusStrip1.Text = "statusStrip1";
+            this.stsMain.Location = new System.Drawing.Point(0, 525);
+            this.stsMain.Name = "stsMain";
+            this.stsMain.Size = new System.Drawing.Size(977, 22);
+            this.stsMain.TabIndex = 9;
+            this.stsMain.Text = "statusStrip1";
             // 
             // Main
             // 
@@ -325,7 +325,7 @@ namespace RomPackTool.WinForms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(977, 547);
             this.Controls.Add(this.pnlMain);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.stsMain);
             this.Name = "Main";
             this.Text = "RomPackTool - Alpha 6";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
@@ -350,7 +350,7 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox txtVitaIp;
         private System.Windows.Forms.Label lblIP;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnVitaFtpToNoNpDrm;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel pnlMain;
@@ -370,7 +370,7 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.TabPage tabLog;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TabPage tabPSV;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip stsMain;
         private System.Windows.Forms.Label lblDivider;
     }
 }

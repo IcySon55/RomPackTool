@@ -6,9 +6,9 @@
     public class ProgressReport
     {
         /// <summary>
-        /// The maximum value.
+        /// The maximum value. Defaults to 0 which allows the UI to ignore the value and keep the existing one.
         /// </summary>
-        public double MaxValue { get; set; } = 100;
+        public double MaxValue { get; set; } = 0;
 
         /// <summary>
         /// The current progress value being reported. Usually between 0 and 100.
