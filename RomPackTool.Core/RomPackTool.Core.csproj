@@ -5,9 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentFTP" Version="36.0.0" />
+    <PackageReference Include="FluentFTP" Version="37.0.1" />
     <PackageReference Include="Komponent" Version="2.0.8" />
     <PackageReference Include="Kontract" Version="2.0.8" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -79,7 +79,9 @@ namespace RomPackTool.WinForms
             {
                 // Update progress.
                 progressBar1.Maximum = (int)(progress.MaxValue > 0 ? progress.MaxValue : progressBar1.Maximum);
-                progressBar1.Value = (int)progress.Value;
+
+                if (progress.Value > 0)
+                    progressBar1.Value = (int)progress.Value;
 
                 // Update file.
                 if (progress is FileReport file)

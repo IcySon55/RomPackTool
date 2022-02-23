@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 namespace RomPackTool.Core.Processes.Vita
 {
     /// <summary>
-    /// Downloads a Vita Cartridge as a NoNpDrm RomPack archive.
+    /// Downloads a Vita Digital Game as a NoNpDrm RomPack archive.
     /// </summary>
-    public class VitaFtpCartToNoNpDrm : VitaFtpProcess
+    public class VitaFtpDigitalToNoNpDrm : VitaFtpProcess
     {
         /// <summary>
         /// 
@@ -22,13 +22,13 @@ namespace RomPackTool.Core.Processes.Vita
         private VitaAppEntry _vitaApp { get; }
 
         /// <summary>
-        /// Instantiates a new <see cref="VitaFtpCartToNoNpDrm"/> process.
+        /// Instantiates a new <see cref="VitaFtpDigitalToNoNpDrm"/> process.
         /// </summary>
         /// <param name="ipAddress">Vita IP address.</param>
         /// <param name="outputPath">Path to create the dump in.</param>
-        public VitaFtpCartToNoNpDrm(VitaFtpOptions options, VitaAppEntry vitaApp) : base(options)
+        public VitaFtpDigitalToNoNpDrm(VitaFtpOptions options, VitaAppEntry vitaApp) : base(options)
         {
-            Name = "Vita Cart to NoNpDrm";
+            Name = "Vita Digital to NoNpDrm";
             _vitaApp = vitaApp;
         }
 
@@ -65,11 +65,11 @@ namespace RomPackTool.Core.Processes.Vita
                     await Task.Delay(1, token);
                 }
 
-                // Make sure a cart is inserted.
-                valid = await client.DirectoryExistsAsync($"/gro0:/app/{_vitaApp.TitleId}", token);
+                // Make sure the target title exists
+                valid = await client.DirectoryExistsAsync($"/ux0:/app/{_vitaApp.TitleId}", token);
                 if (!valid)
                 {
-                    Report($"The \"{_vitaApp.Name}\" game cart is not inserted.");
+                    Report($"\"{_vitaApp.Name}\" could not be found on ux0.");
                     State = ProcessState.Error;
                     return false;
                 }
@@ -77,21 +77,18 @@ namespace RomPackTool.Core.Processes.Vita
                 Report("Validating environment...");
                 await Task.Delay(1, token);
 
-                // Move to the app directory.
-                await client.SetWorkingDirectoryAsync("/gro0:/app", token);
-
-                Report($"Found {_vitaApp.TitleId} in the cart slot...");
+                Report($"Found {_vitaApp.TitleId} on the memory card...");
                 await Task.Delay(1, token);
 
                 // Set the path to the app.
-                var titlePath = $"/gro0:/app/{_vitaApp.TitleId}";
+                var titlePath = $"/ux0:/app/{_vitaApp.TitleId}";
 
                 // Check if the NoNpDrm license has been created.
                 var licensePath = $"/ux0:/nonpdrm/license/app/{_vitaApp.TitleId}";
                 var licenseFileName = "6488b73b912a753a492e2714e9b38bc7.rif";
                 var licenseFilePath = $"{licensePath}/{licenseFileName}";
 
-                if (!client.DirectoryExists(licensePath))
+                if (!await client.DirectoryExistsAsync(licensePath, token))
                 {
                     Report($"Fake license not created. Please run the game to generate the license.");
                     State = ProcessState.Error;
@@ -121,7 +118,7 @@ namespace RomPackTool.Core.Processes.Vita
 
                 // Build the RMP
                 var rmp = new RomPack();
-                rmp.Header.ContentDescriptor = "NoNpDrmPhysical";
+                rmp.Header.ContentDescriptor = "NoNpDrmDigital";
 
                 // Migrate the incoming FTP files.
                 rmp.Files = files.ToList<FileEntry>();
@@ -136,12 +133,14 @@ namespace RomPackTool.Core.Processes.Vita
 
                 var fileCount = rmp.Files.Count;
                 Report($"Found {fileCount} file(s)!");
-                await Task.Delay(100, token);
+                await Task.Delay(1, token);
 
                 // Save the file...
                 Report(0, fileCount);
                 Report($"Transferring...");
-                var noNpDrmPath = Path.Combine(_outputPath, "NoNpDrm", _vitaApp.TitleId + ".cart.nonpdrm");
+                await Task.Delay(1, token);
+
+                var noNpDrmPath = Path.Combine(_outputPath, "NoNpDrm", _vitaApp.TitleId + ".psn.nonpdrm");
                 var saveResult = await rmp.FtpSave(File.Create(noNpDrmPath), client, Progress, token);
 
                 if (saveResult != ProcessState.Completed)
@@ -205,7 +204,7 @@ namespace RomPackTool.Core.Processes.Vita
                         files.Add(new FtpFileEntry
                         {
                             FtpPath = item.FullName,
-                            Path = item.FullName.Replace("/gro0:/app", string.Empty),
+                            Path = item.FullName.Replace("/ux0:/app", string.Empty),
                             Size = item.Size
                         });
                         ReportFile(item.Name, fileSize: item.Size);

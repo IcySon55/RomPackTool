@@ -74,10 +74,14 @@ namespace RomPackTool.Core.RMPK
                     await Task.Delay(1, token);
 
                     // Download the file over FTP;
-                    var ftpFileStream = await client.OpenReadAsync(ftpFile.FtpPath, FtpDataType.Binary, 0, token);
-                    await ftpFileStream.CopyToAsync(bw.BaseStream, token);
-                    ftpFileStream.Close();
-                    await client.GetReplyAsync(token);
+
+                    var ftpProgress = new Progress<FtpProgress>();
+                    ftpProgress.ProgressChanged += (sender, e) =>
+                    {
+                        //progress.Report(new ProgressReport() {  });
+                    };
+
+                    await client.DownloadAsync(bw.BaseStream, ftpFile.FtpPath, 0, ftpProgress, token);
 
                     // Update the UI.
                     progress.Report(new ProgressReport { Value = i + 1 });

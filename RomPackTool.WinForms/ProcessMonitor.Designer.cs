@@ -104,7 +104,7 @@ namespace RomPackTool.WinForms
             // 
             this.lblFile2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblFile2.Location = new System.Drawing.Point(64, 21);
+            this.lblFile2.Location = new System.Drawing.Point(64, 87);
             this.lblFile2.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.lblFile2.Name = "lblFile2";
             this.lblFile2.Size = new System.Drawing.Size(187, 29);
@@ -114,7 +114,7 @@ namespace RomPackTool.WinForms
             // 
             this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblMessage.Location = new System.Drawing.Point(64, 56);
+            this.lblMessage.Location = new System.Drawing.Point(64, 5);
             this.lblMessage.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(187, 60);
@@ -124,7 +124,7 @@ namespace RomPackTool.WinForms
             // 
             this.lblFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblFile.Location = new System.Drawing.Point(64, 5);
+            this.lblFile.Location = new System.Drawing.Point(64, 71);
             this.lblFile.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.lblFile.Name = "lblFile";
             this.lblFile.Size = new System.Drawing.Size(187, 16);
@@ -132,7 +132,7 @@ namespace RomPackTool.WinForms
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(5, 56);
+            this.label1.Location = new System.Drawing.Point(5, 5);
             this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 16);
@@ -164,7 +164,7 @@ namespace RomPackTool.WinForms
             // 
             // lblFileLabel
             // 
-            this.lblFileLabel.Location = new System.Drawing.Point(5, 5);
+            this.lblFileLabel.Location = new System.Drawing.Point(5, 71);
             this.lblFileLabel.Margin = new System.Windows.Forms.Padding(3);
             this.lblFileLabel.Name = "lblFileLabel";
             this.lblFileLabel.Size = new System.Drawing.Size(56, 16);

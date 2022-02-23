@@ -1,4 +1,7 @@
-﻿namespace RomPackTool.Core
+﻿using System.Drawing;
+using System.Drawing.Drawing2D;
+
+namespace RomPackTool.Core
 {
     /// <summary>
     /// Helper extensions.
@@ -38,6 +41,24 @@
             }
 
             return string.Format("{0:0.#}{1}", size, sizes[order]);
+        }
+
+        /// <summary>
+        /// Produce a decent quality thumbnail of the icon.
+        /// </summary>
+        /// <param name="img"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public static Image GetThumbnailImageHQ(this Image img, int width, int height)
+        {
+            Bitmap thumbnail = new(width, height);
+            using var gfx = Graphics.FromImage(thumbnail);
+            gfx.SmoothingMode = SmoothingMode.HighQuality;
+            gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            gfx.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            gfx.DrawImage(img, new Rectangle(0, 0, width, height));
+            return thumbnail;
         }
     }
 }

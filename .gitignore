@@ -263,3 +263,6 @@ __pycache__/
 ## Our own ignores
 /dist
 /*.rar
+/RomPackTool.WinForms/images/Source
+/SfoTest.linq
+/param.sfo

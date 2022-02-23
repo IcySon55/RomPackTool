@@ -17,7 +17,7 @@ namespace RomPackTool.Core.Sony
         /// The long TitleID.
         /// </summary>
         [FixedLength(0x30, StringEncoding = StringEncoding.ASCII)]
-        public string TitleID;
+        public string ContentID;
 
         /// <summary>
         /// Unknown bytes.

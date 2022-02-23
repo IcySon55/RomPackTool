@@ -2,6 +2,7 @@
 using Komponent.IO;
 using Komponent.IO.Streams;
 using RomPackTool.Core.Processes;
+using RomPackTool.Core.Processes.PSV;
 using RomPackTool.Core.Processes.Vita;
 using RomPackTool.Core.Processing;
 using RomPackTool.Core.PSV;
@@ -9,6 +10,7 @@ using RomPackTool.Core.RMPK;
 using RomPackTool.Core.Sony;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,7 +45,7 @@ namespace RomPackTool.WinForms
         {
             Icon = Properties.Resources.icon;
             txtVitaIp.Text = Properties.Settings.Default.VitaIP;
-            txtVitaDumpPath.Text = Properties.Settings.Default.VitaDumpDirectory;
+            txtVitaSyncPath.Text = Properties.Settings.Default.VitaDumpDirectory;
         }
 
         /// <summary>
@@ -55,23 +57,116 @@ namespace RomPackTool.WinForms
         {
             // Update settings from UI before closing.
             Properties.Settings.Default.VitaIP = txtVitaIp.Text.Trim();
-            Properties.Settings.Default.VitaDumpDirectory = txtVitaDumpPath.Text.Trim();
+            Properties.Settings.Default.VitaDumpDirectory = txtVitaSyncPath.Text.Trim();
 
             // Save settings.
             Properties.Settings.Default.Save();
         }
 
+        #region Vita
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private VitaFtpOptions BuildVitaFtpOptions() => new(txtVitaIp.Text.Trim(), txtVitaSyncPath.Text.Trim());
+
+        /// <summary>
+        /// Refresh the list of games on the Vita.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void btnVitaRefresh_Click(object sender, EventArgs e)
+        {
+            var options = BuildVitaFtpOptions();
+            var process = new VitaFtpGetAppList(options, Path.Combine(options.SyncPath, "Cache"));
+            await RunProcess(process);
+
+            var apps = process.Apps;
+
+            dgvVita.AutoGenerateColumns = false;
+            dgvVita.DataSource = apps;
+            dgvVita.AutoResizeColumns();
+
+            var cartRow = dgvVita.Rows.Cast<DataGridViewRow>().Where(r => ((VitaAppEntry)r.DataBoundItem).Inserted).FirstOrDefault();
+            foreach (DataGridViewCell cell in cartRow.Cells)
+                cell.Style.BackColor = Color.LightGreen;
+        }
+
+        /// <summary>
+        /// Start a 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnVitaFtpToNoNpDrm_Click(object sender, EventArgs e)
         {
-            var ipAddress = txtVitaIp.Text.Trim();
-            var outputPath = txtVitaDumpPath.Text.Trim();
-            var process = new VitaFtpCartToNoNpDrm(ipAddress, outputPath);
+            if (dgvVita.SelectedRows.Count > 0)
+            {
+                VitaFtpProcess process = null;
+                var selectedApp = (VitaAppEntry)dgvVita.SelectedRows[0].DataBoundItem;
 
-            tbsMain.SelectedTab = tabLog;
+                if (selectedApp.Source.StartsWith("Cartridge"))
+                    process = new VitaFtpCartToNoNpDrm(BuildVitaFtpOptions(),selectedApp);
+                else if (selectedApp.Source.Contains("PSN"))
+                    process = new VitaFtpDigitalToNoNpDrm(BuildVitaFtpOptions(), selectedApp);
 
-            await RunProcess(process);
+                if (process != null)
+                    await RunProcess(process);
+            }
+
+            // TEST CODE:
+            //var formatOptions = new ExFat.ExFatFormatOptions
+            //{
+            //    BytesPerSector = 0x200,
+            //    VolumeSpace = 0x10000
+            //};
+            //var ex = ExFat.Partition.ExFatPartition.Format(new MemoryStream(10 * 1024 * 1024), formatOptions);
         }
+
+        #endregion
+
+        #region PSV
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private const string PsvFilter = "Vita Image (*.psv)|*.psv|All Files (*.*)|*.*";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void btnVitaStripPSV_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog { Filter = PsvFilter, Title = "Select a PSV to strip..." };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                var process = new PsvStrip(ofd.FileName);
+                await RunProcess(process);
+            }
+        }
+
+        #endregion
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgvVita_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvVita.SelectedRows.Count > 0)
+            {
+                var selectedApp = (VitaAppEntry)dgvVita.SelectedRows[0].DataBoundItem;
+                btnVitaFtpToNoNpDrm.Enabled = !selectedApp.Source.Contains("NoNpDrm");
+            }
+        }
+
+
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -83,7 +178,7 @@ namespace RomPackTool.WinForms
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                textBox1.Clear();
+                txtLog.Clear();
                 var rmp = new RomPack(File.OpenRead(ofd.FileName));
 
                 // Dump the files from the RomPack.
@@ -97,10 +192,10 @@ namespace RomPackTool.WinForms
                     file.FileData.CopyTo(outFile);
 
                     outFile.Close();
-                    textBox1.AppendText($"Extracting {Path.GetFileName(file.Path)}...\r\n");
+                    txtLog.AppendText($"Extracting {Path.GetFileName(file.Path)}...\r\n");
                 }
 
-                textBox1.AppendText($"{Path.GetFileName(ofd.FileName)} was successfully extracted!\r\n");
+                txtLog.AppendText($"{Path.GetFileName(ofd.FileName)} was successfully extracted!\r\n");
             }
         }
 
@@ -145,24 +240,22 @@ namespace RomPackTool.WinForms
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                textBox1.Clear();
-                btnCreateNoIntroPSV.Enabled = false;
-                progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-                progressBar1.Maximum = 1000;
+                txtLog.Clear();
+                btnVitaCreateNoIntroPSV.Enabled = false;
 
                 var progress = new Progress<ProgressReport>(p =>
                 {
                     if (p.Value > 0)
                     {
-                        progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-                        progressBar1.Value = (int)p.Value;
+                        //progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+                        //progressBar1.Value = (int)p.Value;
                     }
                     if (p.HasMessage)
-                        textBox1.AppendText(p.Message + "\r\n");
+                        txtLog.AppendText(p.Message + "\r\n");
                 });
                 await Task.Run(() => ConvertToNoIntro(ofd.FileName, progress));
 
-                btnCreateNoIntroPSV.Enabled = true;
+                btnVitaCreateNoIntroPSV.Enabled = true;
             }
         }
 
@@ -251,9 +344,9 @@ namespace RomPackTool.WinForms
             var ogRif = br.ReadType<VitaRif>();
 
             // Final sanity check.
-            if (ogRif.TitleID != noNpDrmRif.TitleID)
+            if (ogRif.ContentID != noNpDrmRif.ContentID)
             {
-                progress.Report(new ProgressReport { Message = $"ERROR: The PSV is of {ogRif.TitleID.Trim('\0')} but the NoNpDrm RIF provided is for {noNpDrmRif.TitleID.Trim('\0')}." });
+                progress.Report(new ProgressReport { Message = $"ERROR: The PSV is of {ogRif.ContentID.Trim('\0')} but the NoNpDrm RIF provided is for {noNpDrmRif.ContentID.Trim('\0')}." });
                 return;
             }
 
@@ -348,7 +441,7 @@ namespace RomPackTool.WinForms
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                txtVitaDumpPath.Text = ofd.SelectedPath;
+                txtVitaSyncPath.Text = ofd.SelectedPath;
                 Properties.Settings.Default.VitaDumpDirectory = ofd.SelectedPath;
                 Properties.Settings.Default.Save();
             }
@@ -364,7 +457,7 @@ namespace RomPackTool.WinForms
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                textBox1.Clear();
+                txtLog.Clear();
 
                 using var br = new BinaryReaderX(File.OpenRead(ofd.FileName));
 
@@ -372,7 +465,7 @@ namespace RomPackTool.WinForms
 
                 if (psv.Magic != "PSV\0" && !psv.Flags.HasFlag(PsvFlags.PLAG_NOINTRO))
                 {
-                    textBox1.AppendText($"ERROR: The selected file is not a No-Intro PSV.");
+                    txtLog.AppendText($"ERROR: The selected file is not a No-Intro PSV.");
                     return;
                 }
 
@@ -402,7 +495,7 @@ namespace RomPackTool.WinForms
                 licenseFileStream.CopyTo(workFile);
                 workFile.Close();
 
-                textBox1.AppendText($"\\{$@"sce_sys\package\work.bin"}\r\n");
+                txtLog.AppendText($"\\{$@"sce_sys\package\work.bin"}\r\n");
 
                 exFatStream.Close();
                 br.BaseStream.Close();
@@ -419,13 +512,13 @@ namespace RomPackTool.WinForms
                     ProcessExFatDirectory(partition, $@"\{item.Path}", titleID);
                 else
                 {
-                    var outPath = Path.Combine(txtVitaDumpPath.Text.Trim(), "Vita", titleID, item.Path.Replace($@"app\{titleID}\", string.Empty));
+                    var outPath = Path.Combine(txtVitaSyncPath.Text.Trim(), "Vita", titleID, item.Path.Replace($@"app\{titleID}\", string.Empty));
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                     var outFile = File.Create(outPath);
                     var file = partition.Open(item.Path, FileMode.Open, FileAccess.Read);
                     file.CopyTo(outFile);
                     outFile.Close();
-                    textBox1.AppendText($"\\{item.Path.Replace($@"app\{titleID}\", string.Empty)}\r\n");
+                    txtLog.AppendText($"\\{item.Path.Replace($@"app\{titleID}\", string.Empty)}\r\n");
                 }
             }
         }
@@ -444,9 +537,8 @@ namespace RomPackTool.WinForms
             // Can this process be added?
             if (_processes.Any(p => p.ExclusivityGroup == process.ExclusivityGroup))
             {
-                // No, this process is already running.
-                return;
-            }
+                return; // No, this process is already running.
+            } // Yes.
 
             // Register this process.
             _processes.Add(process);
@@ -459,7 +551,7 @@ namespace RomPackTool.WinForms
             pm.ProgressChanged += (sender, e) =>
             {
                 if (e.HasMessage)
-                    textBox1.AppendText(e.Message + (e.NewLine ? "\r\n" : string.Empty));
+                    txtLog.AppendText(e.Message + (e.NewLine ? "\r\n" : string.Empty));
             };
 
             // Add a handler for removing the control when it is closed.

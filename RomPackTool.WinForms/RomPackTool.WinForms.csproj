@@ -47,11 +47,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\RomPackTool.Core\RomPackTool.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RomPackTool.Core\RomPackTool.Core.csproj" />
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>
