@@ -266,3 +266,5 @@ __pycache__/
 /RomPackTool.WinForms/images/Source
 /SfoTest.linq
 /param.sfo
+/RomPackTool.Core/Properties/PublishProfiles
+/RomPackTool.WinForms/Properties/PublishProfiles

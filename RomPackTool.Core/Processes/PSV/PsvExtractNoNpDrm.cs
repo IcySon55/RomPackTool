@@ -99,7 +99,7 @@ namespace RomPackTool.Core.Processes.PSV
                 }
 
                 // Do we need a NoNpDrm RIF?
-                if ((_isStripped || !_psvFlags.HasFlag(PsvFlags.FLAG_NOINTRO)) && !File.Exists(_noNpDrmRifPath))
+                if ((_isStripped || !_psvFlags.HasFlag(PsvFlags.FLAG_NONPDRM)) && !File.Exists(_noNpDrmRifPath))
                 {
                     Report($@"The selected PSV is a {(_isStripped ? "stripped" : "standard")} dump and requires a NoNpDrm rif for extraction.
 It should be called {Path.GetFileName(_noNpDrmRifPath)} and be in the same directory as the PSV.");
@@ -157,7 +157,7 @@ It should be called {Path.GetFileName(_noNpDrmRifPath)} and be in the same direc
                 await ProcessExFatDirectory(partition, @"\app", titleID);
 
                 // work.bin transfer.
-                if (_isStripped || !_psvFlags.HasFlag(PsvFlags.FLAG_NOINTRO))
+                if (_isStripped || !_psvFlags.HasFlag(PsvFlags.FLAG_NONPDRM))
                 {
                     var workPath = Path.Combine(_outputPath, $@"{titleID}\sce_sys\package\work.bin");
                     File.Copy(_noNpDrmRifPath, workPath, true);

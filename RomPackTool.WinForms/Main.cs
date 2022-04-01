@@ -253,7 +253,7 @@ namespace RomPackTool.WinForms
             }
         }
 
-        private async void btnCreateNoIntroPSV_Click(object sender, EventArgs e)
+        private async void btnCreateNoNpDrmPSV_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog
             {
@@ -264,7 +264,7 @@ namespace RomPackTool.WinForms
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 txtLog.Clear();
-                btnVitaCreateNoIntroPSV.Enabled = false;
+                btnVitaCreateNoNpDrmPSV.Enabled = false;
 
                 var progress = new Progress<ProgressReport>(p =>
                 {
@@ -276,13 +276,13 @@ namespace RomPackTool.WinForms
                     if (p.HasMessage)
                         txtLog.AppendText(p.Message + "\r\n");
                 });
-                await Task.Run(() => ConvertToNoIntro(ofd.FileName, progress));
+                await Task.Run(() => ConvertToNoNpDrmPSV(ofd.FileName, progress));
 
-                btnVitaCreateNoIntroPSV.Enabled = true;
+                btnVitaCreateNoNpDrmPSV.Enabled = true;
             }
         }
 
-        private async Task ConvertToNoIntro(string psvPath, IProgress<ProgressReport> progress)
+        private async Task ConvertToNoNpDrmPSV(string psvPath, IProgress<ProgressReport> progress)
         {
             // Variables
             var noNpDrmRifPath = Path.Combine(Path.GetDirectoryName(psvPath), Path.GetFileNameWithoutExtension(psvPath) + ".rif");
@@ -302,7 +302,7 @@ namespace RomPackTool.WinForms
 
             if (psv.Key1.SequenceEqual(new byte[] { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }))
             {
-                progress.Report(new ProgressReport { Message = $"ERROR: Invalid PSV file. (Was it already converted for No-Intro?)" });
+                progress.Report(new ProgressReport { Message = $"ERROR: Invalid PSV file. (Was it already converted to NoNpDrm PSV?)" });
                 return;
             }
 
@@ -381,12 +381,12 @@ namespace RomPackTool.WinForms
 
             // Reset our PSV reader back to the beginning.
             br.BaseStream.Position = 0;
-            progress.Report(new ProgressReport { Message = $"Saving No-Intro PSV...", Value = 0 });
+            progress.Report(new ProgressReport { Message = $"Saving NoNpDrm PSV...", Value = 0 });
 
             // PSV Header
             var newHeader = new PsvHeader
             {
-                Flags = PsvFlags.FLAG_NOINTRO,
+                Flags = PsvFlags.FLAG_NONPDRM,
                 ImageSize = psv.ImageSize,
                 ImageOffsetSector = psv.ImageOffsetSector,
                 Version = psv.Version
@@ -452,7 +452,7 @@ namespace RomPackTool.WinForms
             }
 
             bw.Close();
-            progress.Report(new ProgressReport { Message = $"No-Intro PSV created successfully!", Value = 1000 });
+            progress.Report(new ProgressReport { Message = $"NoNpDrm PSV created successfully!", Value = 1000 });
         }
 
         private void btnBrowseVitaDumps_Click(object sender, EventArgs e)

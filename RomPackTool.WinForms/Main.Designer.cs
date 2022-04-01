@@ -54,7 +54,7 @@ namespace RomPackTool.WinForms
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.btnVitaExtractNoNpDrm = new System.Windows.Forms.Button();
             this.btnVitaStripPSV = new System.Windows.Forms.Button();
-            this.btnVitaCreateNoIntroPSV = new System.Windows.Forms.Button();
+            this.btnVitaCreateNoNpDrmPSV = new System.Windows.Forms.Button();
             this.tabRomPack = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnBuildRomPack = new System.Windows.Forms.Button();
@@ -330,7 +330,7 @@ namespace RomPackTool.WinForms
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.btnVitaExtractNoNpDrm);
             this.groupBox3.Controls.Add(this.btnVitaStripPSV);
-            this.groupBox3.Controls.Add(this.btnVitaCreateNoIntroPSV);
+            this.groupBox3.Controls.Add(this.btnVitaCreateNoNpDrmPSV);
             this.groupBox3.Location = new System.Drawing.Point(6, 6);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(654, 262);
@@ -359,15 +359,15 @@ namespace RomPackTool.WinForms
             this.btnVitaStripPSV.UseVisualStyleBackColor = true;
             this.btnVitaStripPSV.Click += new System.EventHandler(this.btnVitaStripPSV_Click);
             // 
-            // btnVitaCreateNoIntroPSV
+            // btnVitaCreateNoNpDrmPSV
             // 
-            this.btnVitaCreateNoIntroPSV.Location = new System.Drawing.Point(11, 74);
-            this.btnVitaCreateNoIntroPSV.Name = "btnVitaCreateNoIntroPSV";
-            this.btnVitaCreateNoIntroPSV.Size = new System.Drawing.Size(229, 46);
-            this.btnVitaCreateNoIntroPSV.TabIndex = 7;
-            this.btnVitaCreateNoIntroPSV.Text = "Create No-Intro PSV";
-            this.btnVitaCreateNoIntroPSV.UseVisualStyleBackColor = true;
-            this.btnVitaCreateNoIntroPSV.Click += new System.EventHandler(this.btnCreateNoIntroPSV_Click);
+            this.btnVitaCreateNoNpDrmPSV.Location = new System.Drawing.Point(11, 74);
+            this.btnVitaCreateNoNpDrmPSV.Name = "btnVitaCreateNoNpDrmPSV";
+            this.btnVitaCreateNoNpDrmPSV.Size = new System.Drawing.Size(229, 46);
+            this.btnVitaCreateNoNpDrmPSV.TabIndex = 7;
+            this.btnVitaCreateNoNpDrmPSV.Text = "Create NoNpDrm PSV";
+            this.btnVitaCreateNoNpDrmPSV.UseVisualStyleBackColor = true;
+            this.btnVitaCreateNoNpDrmPSV.Click += new System.EventHandler(this.btnCreateNoNpDrmPSV_Click);
             // 
             // tabRomPack
             // 
@@ -495,7 +495,7 @@ namespace RomPackTool.WinForms
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnBuildRomPack;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button btnVitaCreateNoIntroPSV;
+        private System.Windows.Forms.Button btnVitaCreateNoNpDrmPSV;
         private System.Windows.Forms.Button btnBrowseVitaDumps;
         private System.Windows.Forms.TextBox txtVitaSyncPath;
         private System.Windows.Forms.Label label1;
