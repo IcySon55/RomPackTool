@@ -175,7 +175,11 @@ namespace RomPackTool.Core.Sony
         /// 
         /// </summary>
         /// <returns></returns>
-        public override string ToString() => Value.ToString();
+        public override string ToString() => DataFormat switch
+        {
+            SfoDataFormat.Int32 => ((int)Value).ToString("X2"),
+            _ => Value.ToString(),
+        };
     }
 
     /// <summary>
@@ -188,5 +192,4 @@ namespace RomPackTool.Core.Sony
         Ascii = 0x402,
         Int32 = 0x404
     }
-
 }

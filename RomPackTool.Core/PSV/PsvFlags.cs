@@ -12,6 +12,6 @@ namespace RomPackTool.Core.PSV
         FLAG_TRIMMED = 1,
         FLAG_DIGITAL = 2,
         FLAG_COMPRESSED = 4,
-        PLAG_NOINTRO = 8
+        FLAG_NOINTRO = 8
     }
 }

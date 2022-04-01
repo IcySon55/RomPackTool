@@ -15,4 +15,10 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ExFat.Core">
+      <HintPath>lib\ExFat.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

@@ -148,6 +148,29 @@ namespace RomPackTool.WinForms
             }
         }
 
+
+        /// <summary>
+        /// Extracts a NoNpDrm copy of three different PSV types.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void btnExtractNoNpDrm_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                Filter = "Vita Image (*.psv)|*.psv",
+                Title = "Select a PSV to extract..."
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                var process = new PsvExtractNoNpDrm(ofd.FileName, Properties.Settings.Default.VitaDumpDirectory);
+
+                if (process != null)
+                    await RunProcess(process);
+            }
+        }
+
         #endregion
 
 
@@ -235,7 +258,7 @@ namespace RomPackTool.WinForms
             var ofd = new OpenFileDialog
             {
                 Filter = "Vita Image (*.psv)|*.psv|All Files (*.*)|*.*",
-                Title = "Select a PSV to convert..."
+                Title = "Select a stripped PSV to convert..."
             };
 
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -285,7 +308,7 @@ namespace RomPackTool.WinForms
 
             if (!File.Exists(noNpDrmRifPath))
             {
-                progress.Report(new ProgressReport { Message = $"ERROR: The NoNpDrm rif is missing. It should be called {Path.GetFileName(noNpDrmRifPath)} and in the same directory as the PSV." });
+                progress.Report(new ProgressReport { Message = $"ERROR: The NoNpDrm rif is missing. It should be called {Path.GetFileName(noNpDrmRifPath)} and be in the same directory as the PSV." });
                 return;
             }
 
@@ -363,7 +386,7 @@ namespace RomPackTool.WinForms
             // PSV Header
             var newHeader = new PsvHeader
             {
-                Flags = PsvFlags.PLAG_NOINTRO,
+                Flags = PsvFlags.FLAG_NOINTRO,
                 ImageSize = psv.ImageSize,
                 ImageOffsetSector = psv.ImageOffsetSector,
                 Version = psv.Version
@@ -444,82 +467,6 @@ namespace RomPackTool.WinForms
                 txtVitaSyncPath.Text = ofd.SelectedPath;
                 Properties.Settings.Default.VitaDumpDirectory = ofd.SelectedPath;
                 Properties.Settings.Default.Save();
-            }
-        }
-
-        private void btnExtractNoNpDrm_Click(object sender, EventArgs e)
-        {
-            var ofd = new OpenFileDialog
-            {
-                Filter = "Vita No-Intro Image (*.no-intro.psv)|*.no-intro.psv",
-                Title = "Select a No-Intro PSV to extract..."
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                txtLog.Clear();
-
-                using var br = new BinaryReaderX(File.OpenRead(ofd.FileName));
-
-                var psv = br.ReadType<PsvHeader>();
-
-                if (psv.Magic != "PSV\0" && !psv.Flags.HasFlag(PsvFlags.PLAG_NOINTRO))
-                {
-                    txtLog.AppendText($"ERROR: The selected file is not a No-Intro PSV.");
-                    return;
-                }
-
-                br.BaseStream.Position = psv.ImageOffsetSector * PsvHeader.SectorSize;
-
-                var scei = br.ReadType<VitaCartHeader>();
-                br.BaseStream.Position = scei.ExFatOffset + PsvHeader.SectorSize + 0x48;
-
-                var volumeSize = br.ReadInt64() * PsvHeader.SectorSize;
-                var exFatStream = new SubStream(br.BaseStream, scei.ExFatOffset + PsvHeader.SectorSize, volumeSize);
-
-                using var partition = new ExFatPathFilesystem(exFatStream);
-
-                // Title ID
-                var titleDirectory = partition.EnumerateEntries(@"\app").First();
-                var titleID = titleDirectory.Path.Substring(titleDirectory.Path.LastIndexOf(@"\") + 1);
-
-                ProcessExFatDirectory(partition, @"\app", titleID);
-
-                // work.bin transfer.
-                var licenseFile = partition.EnumerateEntries($@"\license\app\{titleID}").First();
-
-                var workPath = Path.Combine(Properties.Settings.Default.VitaDumpDirectory, $@"Vita\{titleID}\sce_sys\package\work.bin");
-                var workFile = File.Create(workPath);
-
-                var licenseFileStream = partition.Open(licenseFile.Path, FileMode.Open, FileAccess.Read);
-                licenseFileStream.CopyTo(workFile);
-                workFile.Close();
-
-                txtLog.AppendText($"\\{$@"sce_sys\package\work.bin"}\r\n");
-
-                exFatStream.Close();
-                br.BaseStream.Close();
-            }
-        }
-
-        private void ProcessExFatDirectory(ExFatPathFilesystem partition, string path, string titleID)
-        {
-            var items = partition.EnumerateEntries(path);
-
-            foreach (var item in items)
-            {
-                if (item.Attributes.HasFlag(FileAttributes.Directory))
-                    ProcessExFatDirectory(partition, $@"\{item.Path}", titleID);
-                else
-                {
-                    var outPath = Path.Combine(txtVitaSyncPath.Text.Trim(), "Vita", titleID, item.Path.Replace($@"app\{titleID}\", string.Empty));
-                    Directory.CreateDirectory(Path.GetDirectoryName(outPath));
-                    var outFile = File.Create(outPath);
-                    var file = partition.Open(item.Path, FileMode.Open, FileAccess.Read);
-                    file.CopyTo(outFile);
-                    outFile.Close();
-                    txtLog.AppendText($"\\{item.Path.Replace($@"app\{titleID}\", string.Empty)}\r\n");
-                }
             }
         }
 
